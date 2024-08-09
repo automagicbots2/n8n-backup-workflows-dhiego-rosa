@@ -1,0 +1,1523 @@
+{
+  "active": true,
+  "connections": {
+    "chega_da_fila": {
+      "main": [
+        [
+          {
+            "node": "segundo_ou_mais_erro3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "segundo_ou_mais_erro3": {
+      "main": [
+        [
+          {
+            "node": "Stop and Error3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "pesquisa_lead5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "insert_data_data_lake": {
+      "main": [
+        [
+          {
+            "node": "update_qualificacao_qualificado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "nao_encontrou_registro_hj_data_lake": {
+      "main": [
+        [
+          {
+            "node": "lead_ja_existia2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "lead_ja_existia3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update_data_data_lake1": {
+      "main": [
+        [
+          {
+            "node": "update_qualificacao_qualificado2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "lead_ja_existia2": {
+      "main": [
+        [
+          {
+            "node": "insert_data_data_lake",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "insert_data_data_lake3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "insert_data_data_lake3": {
+      "main": [
+        [
+          {
+            "node": "update_qualificacao_qualificado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "lead_ja_existia3": {
+      "main": [
+        [
+          {
+            "node": "update_data_data_lake1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "update_data_data_lake3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update_data_data_lake3": {
+      "main": [
+        [
+          {
+            "node": "update_qualificacao_qualificado2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "pesquisa_data_data_lake1": {
+      "main": [
+        [
+          {
+            "node": "nao_encontrou_registro_hj_data_lake",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update_qualificacao_qualificado": {
+      "main": [
+        [
+          {
+            "node": "dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update_qualificacao_qualificado2": {
+      "main": [
+        [
+          {
+            "node": "dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "entra_na_fila1": {
+      "main": [
+        [
+          {
+            "node": "atualiza_id_pipedrive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "pesquisa_lead5": {
+      "main": [
+        [
+          {
+            "node": "insert_data_aplicacao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "insert_data_utm_aplicacao": {
+      "main": [
+        [
+          {
+            "node": "pesquisa_data_data_lake1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "dados": {
+      "main": [
+        []
+      ]
+    },
+    "insert_data_aplicacao": {
+      "main": [
+        [
+          {
+            "node": "insert_data_utm_aplicacao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2024-07-09T14:50:25.668Z",
+  "id": "nDOQzcXcs1jzDuRd",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "⌚[DHIEGO ROSA] - Aplicação Preenchida - Parte 4 - Qualificado",
+  "nodes": [
+    {
+      "parameters": {
+        "queue": "Não Agendamentos - Parte 4 - Qualificado",
+        "options": {
+          "arguments": {
+            "argument": [
+              {
+                "key": "x-queue-type",
+                "value": "quorum"
+              }
+            ]
+          },
+          "acknowledge": "executionFinishesSuccessfully",
+          "jsonParseBody": "={{ true }}",
+          "parallelMessages": 3
+        }
+      },
+      "id": "92b07948-5d70-420f-be42-68fb97a1355b",
+      "name": "chega_da_fila",
+      "type": "n8n-nodes-base.rabbitmqTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1220,
+        600
+      ],
+      "credentials": {
+        "rabbitmq": {
+          "id": "lHkljF71xS7ATT1K",
+          "name": "[RabbitMQ] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "errorMessage": "An error ocurred!"
+      },
+      "id": "337b47ea-b190-4227-95cd-2bbc0a0e5d9f",
+      "name": "Stop and Error3",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        -820,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.fields.redelivered }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "681542b4-ff7a-478b-a14e-8a2345408fc7",
+      "name": "segundo_ou_mais_erro3",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -1020,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "table": {
+          "__rl": true,
+          "value": "data_lake_ht",
+          "mode": "list",
+          "cachedResultName": "data_lake_ht"
+        },
+        "dataMode": "defineBelow",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "data",
+              "value": "={{$now.toFormat('yyyy-MM-dd')}}"
+            },
+            {
+              "column": "qtd_aplicacoes",
+              "value": "=1"
+            },
+            {
+              "column": "qtd_aplicacoes_qualificadas",
+              "value": "=1"
+            }
+          ]
+        },
+        "options": {
+          "detailedOutput": true
+        }
+      },
+      "id": "f635b084-7f1e-421b-89e1-233dac4f24aa",
+      "name": "insert_data_data_lake",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        600,
+        300
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "OI4kAgzA41BNfgmQ",
+          "name": "[MySQL] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $node[\"pesquisa_data_data_lake1\"].json[\"success\"] }}",
+              "value2": true
+            }
+          ]
+        },
+        "combineOperation": "any"
+      },
+      "id": "3d557f40-c996-4d14-9c6d-59d18f7ad64b",
+      "name": "nao_encontrou_registro_hj_data_lake",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        20,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "table": {
+          "__rl": true,
+          "value": "data_lake_ht",
+          "mode": "list",
+          "cachedResultName": "data_lake_ht"
+        },
+        "dataMode": "defineBelow",
+        "columnToMatchOn": "id_data",
+        "valueToMatchOn": "={{ $node[\"pesquisa_data_data_lake1\"].json[\"id_data\"] }}",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "qtd_aplicacoes",
+              "value": "={{ $node[\"pesquisa_data_data_lake1\"].json[\"qtd_aplicacoes\"] + 1 }}"
+            },
+            {
+              "column": "qtd_aplicacoes_qualificadas",
+              "value": "={{ $node[\"pesquisa_data_data_lake1\"].json[\"qtd_aplicacoes_qualificadas\"] + 1 }}"
+            }
+          ]
+        },
+        "options": {
+          "detailedOutput": true
+        }
+      },
+      "id": "000a8eb6-409b-466d-be40-fdac7557e6b5",
+      "name": "update_data_data_lake1",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        600,
+        660
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "OI4kAgzA41BNfgmQ",
+          "name": "[MySQL] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"verificacao_lead\"] }}"
+            }
+          ]
+        },
+        "combineOperation": "any"
+      },
+      "id": "830cbadb-96c9-4321-8ed3-294afa08e157",
+      "name": "lead_ja_existia2",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        340,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "table": {
+          "__rl": true,
+          "value": "data_lake_ht",
+          "mode": "list",
+          "cachedResultName": "data_lake_ht"
+        },
+        "dataMode": "defineBelow",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "data",
+              "value": "={{$now.toFormat('yyyy-MM-dd')}}"
+            },
+            {
+              "column": "qtd_leads",
+              "value": "=1"
+            },
+            {
+              "column": "qtd_aplicacoes",
+              "value": "=1"
+            },
+            {
+              "column": "qtd_aplicacoes_qualificadas",
+              "value": "=1"
+            }
+          ]
+        },
+        "options": {
+          "detailedOutput": true
+        }
+      },
+      "id": "caf6c1c2-36a1-4aa1-932b-b007857e0c38",
+      "name": "insert_data_data_lake3",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        600,
+        480
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "OI4kAgzA41BNfgmQ",
+          "name": "[MySQL] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"verificacao_lead\"] }}"
+            }
+          ]
+        },
+        "combineOperation": "any"
+      },
+      "id": "e3f06aec-d856-49d3-ac90-82a6167fe14e",
+      "name": "lead_ja_existia3",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        340,
+        760
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "table": {
+          "__rl": true,
+          "value": "data_lake_ht",
+          "mode": "list",
+          "cachedResultName": "data_lake_ht"
+        },
+        "dataMode": "defineBelow",
+        "columnToMatchOn": "id_data",
+        "valueToMatchOn": "={{ $node[\"pesquisa_data_data_lake1\"].json[\"id_data\"] }}",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "qtd_aplicacoes",
+              "value": "={{ $node[\"pesquisa_data_data_lake1\"].json[\"qtd_aplicacoes\"] + 1 }}"
+            },
+            {
+              "column": "qtd_aplicacoes_qualificadas",
+              "value": "={{ $node[\"pesquisa_data_data_lake1\"].json[\"qtd_aplicacoes_qualificadas\"] + 1 }}"
+            },
+            {
+              "column": "qtd_leads",
+              "value": "={{ $node[\"pesquisa_data_data_lake1\"].json[\"qtd_leads\"] + 1 }}"
+            }
+          ]
+        },
+        "options": {
+          "detailedOutput": true
+        }
+      },
+      "id": "c3288e1f-7724-43eb-a41c-88d0ebeb6d66",
+      "name": "update_data_data_lake3",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        600,
+        860
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "OI4kAgzA41BNfgmQ",
+          "name": "[MySQL] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "value": "data_lake_ht",
+          "mode": "list",
+          "cachedResultName": "data_lake_ht"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "data",
+              "value": "={{$now.toFormat('yyyy-MM-dd')}}"
+            }
+          ]
+        },
+        "combineConditions": "OR",
+        "options": {
+          "detailedOutput": false
+        }
+      },
+      "id": "1a418dc8-65b1-4d85-ae02-6a2a71a24f57",
+      "name": "pesquisa_data_data_lake1",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        -200,
+        600
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "OI4kAgzA41BNfgmQ",
+          "name": "[MySQL] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "table": {
+          "__rl": true,
+          "value": "leads",
+          "mode": "list",
+          "cachedResultName": "leads"
+        },
+        "dataMode": "defineBelow",
+        "columnToMatchOn": "id_lead",
+        "valueToMatchOn": "={{ $node[\"pesquisa_lead5\"].json[\"id_lead\"] }}",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "update_time",
+              "value": "={{ $now.toFormat('yyyy-MM-dd HH:mm:ss') }}"
+            },
+            {
+              "column": "nivel_qualificacao",
+              "value": "Qualificado"
+            }
+          ]
+        },
+        "options": {
+          "detailedOutput": true
+        }
+      },
+      "id": "cc669b3f-e0cd-4ffc-93de-4b6e85308cbe",
+      "name": "update_qualificacao_qualificado",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        900,
+        400
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "OI4kAgzA41BNfgmQ",
+          "name": "[MySQL] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "table": {
+          "__rl": true,
+          "value": "leads",
+          "mode": "list",
+          "cachedResultName": "leads"
+        },
+        "dataMode": "defineBelow",
+        "columnToMatchOn": "id_lead",
+        "valueToMatchOn": "={{ $node[\"pesquisa_lead5\"].json[\"id_lead\"] }}",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "update_time",
+              "value": "={{ $now.toFormat('yyyy-MM-dd HH:mm:ss') }}"
+            },
+            {
+              "column": "nivel_qualificacao",
+              "value": "Qualificado"
+            }
+          ]
+        },
+        "options": {
+          "detailedOutput": true
+        }
+      },
+      "id": "d7b4c74c-e135-4378-9e22-1be8bfd7691c",
+      "name": "update_qualificacao_qualificado2",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        900,
+        720
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "OI4kAgzA41BNfgmQ",
+          "name": "[MySQL] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "queue": "Não Agendamentos - Parte 5 - Qualificado",
+        "options": {
+          "arguments": {
+            "argument": [
+              {
+                "key": "x-queue-type",
+                "value": "quorum"
+              }
+            ]
+          },
+          "durable": true
+        }
+      },
+      "id": "b7ffb562-1f79-48c5-ba9e-8a0d670a7292",
+      "name": "entra_na_fila1",
+      "type": "n8n-nodes-base.rabbitmq",
+      "typeVersion": 1,
+      "position": [
+        1380,
+        560
+      ],
+      "credentials": {
+        "rabbitmq": {
+          "id": "lHkljF71xS7ATT1K",
+          "name": "[RabbitMQ] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "value": "leads",
+          "mode": "list",
+          "cachedResultName": "leads"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "id_lead",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_lead_bd\"] }}"
+            }
+          ]
+        },
+        "combineConditions": "OR",
+        "options": {
+          "detailedOutput": false
+        }
+      },
+      "id": "5d916b30-e4b3-4665-8632-3b690bd931c0",
+      "name": "pesquisa_lead5",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        -820,
+        600
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "OI4kAgzA41BNfgmQ",
+          "name": "[MySQL] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "table": {
+          "__rl": true,
+          "value": "aplicacoes_2_utms",
+          "mode": "list",
+          "cachedResultName": "aplicacoes_2_utms"
+        },
+        "dataMode": "defineBelow",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "id_aplicacao",
+              "value": "={{ $node[\"insert_data_aplicacao\"].json[\"data\"][\"insertId\"] }}"
+            },
+            {
+              "column": "utm_source",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"utm_source\"] }}"
+            },
+            {
+              "column": "utm_campaign",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"utm_campaign\"] }}"
+            },
+            {
+              "column": "utm_term",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"utm_term\"] }}"
+            },
+            {
+              "column": "utm_medium",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"utm_medium\"] }}"
+            },
+            {
+              "column": "utm_content",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"utm_content\"] }}"
+            },
+            {
+              "column": "utm_fun",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"funil\"] }}"
+            },
+            {
+              "column": "utm_var",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"variacao_do_funil\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "queryBatching": "single",
+          "detailedOutput": true
+        }
+      },
+      "id": "8d889bd6-cd2e-4489-91b9-feb0dcd20c1a",
+      "name": "insert_data_utm_aplicacao",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        -420,
+        600
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "OI4kAgzA41BNfgmQ",
+          "name": "[MySQL] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "Nome do Cliente",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"Nome do Cliente\"] }}"
+            },
+            {
+              "name": "E-mail do Cliente",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"E-mail do Cliente\"] }}"
+            },
+            {
+              "name": "Telefone do Cliente - Formato BC",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"Telefone do Cliente - Formato BC\"] }}"
+            },
+            {
+              "name": "Telefone do Cliente - Formato Z-API",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"Telefone do Cliente - Formato Z-API\"] }}"
+            },
+            {
+              "name": "utm_content",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"utm_content\"] }}"
+            },
+            {
+              "name": "utm_source",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"utm_source\"] }}"
+            },
+            {
+              "name": "utm_campaign",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"utm_campaign\"] }}"
+            },
+            {
+              "name": "utm_medium",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"utm_medium\"] }}"
+            },
+            {
+              "name": "utm_term",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"utm_term\"] }}"
+            },
+            {
+              "name": "Instagram",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"Instagram\"] }}"
+            },
+            {
+              "name": "id_fluxo_nao_agendou_10_min",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_fluxo_nao_agendou_10_min\"] }}"
+            },
+            {
+              "name": "API-KEY",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"API-KEY\"] }}"
+            },
+            {
+              "name": "pergunta0",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta0\"] }}"
+            },
+            {
+              "name": "pergunta1",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta1\"] }}"
+            },
+            {
+              "name": "pergunta2",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta2\"] }}"
+            },
+            {
+              "name": "pergunta3",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta3\"] }}"
+            },
+            {
+              "name": "pergunta4",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta4\"] }}"
+            },
+            {
+              "name": "pergunta5",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta5\"] }}"
+            },
+            {
+              "name": "pergunta6",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta6\"] }}"
+            },
+            {
+              "name": "pergunta7",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta7\"] }}"
+            },
+            {
+              "name": "pergunta8",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta8\"] }}"
+            },
+            {
+              "name": "pergunta9",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta9\"] }}"
+            },
+            {
+              "name": "pergunta10",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta10\"] }}"
+            },
+            {
+              "name": "pergunta11",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta11\"] }}"
+            },
+            {
+              "name": "pergunta12",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta12\"] }}"
+            },
+            {
+              "name": "pergunta13",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta13\"] }}"
+            },
+            {
+              "name": "pergunta14",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta14\"] }}"
+            },
+            {
+              "name": "pergunta15",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta15\"] }}"
+            },
+            {
+              "name": "pergunta16",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta16\"] }}"
+            },
+            {
+              "name": "pergunta17",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta17\"] }}"
+            },
+            {
+              "name": "pergunta18",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta18\"] }}"
+            },
+            {
+              "name": "pergunta19",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta19\"] }}"
+            },
+            {
+              "name": "pergunta20",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta20\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta0_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta0_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta1_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta1_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta2_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta2_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta3_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta3_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta4_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta4_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta5_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta5_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta6_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta6_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta7_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta7_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta8_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta8_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta9_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta9_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta10_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta10_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta11_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta11_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta12_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta12_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta13_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta13_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta14_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta14_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta15_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta15_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta16_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta16_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta17_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta17_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta18_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta18_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta19_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta19_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta20_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta20_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_pipeline_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_pipeline_crm\"] }}"
+            },
+            {
+              "name": "id_stage_preencheu_aplicacao",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_status_preencheu_aplicacao_crm\"] }}"
+            },
+            {
+              "name": "id_campo_utm_source_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_utm_source_crm\"] }}"
+            },
+            {
+              "name": "id_campo_utm_campaign_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_utm_campaign_crm\"] }}"
+            },
+            {
+              "name": "id_campo_utm_term_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_utm_term_crm\"] }}"
+            },
+            {
+              "name": "id_campo_utm_medium_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_utm_medium_crm\"] }}"
+            },
+            {
+              "name": "id_campo_utm_content_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_utm_content_crm\"] }}"
+            },
+            {
+              "name": "id_campo_utm_fun_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_utm_fun_crm\"] }}"
+            },
+            {
+              "name": "id_campo_utm_var_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_utm_var_crm\"] }}"
+            },
+            {
+              "name": "id_campo_id_banco_de_dados_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_id_banco_de_dados_crm\"] }}"
+            },
+            {
+              "name": "id_campo_crm_origem",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_crm_origem\"] }}"
+            },
+            {
+              "name": "id_sdr",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_sdr\"] }}"
+            },
+            {
+              "name": "valor_produto_downsell_em_centavos",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"valor_produto_downsell_em_centavos\"] }}"
+            },
+            {
+              "name": "url_api_activecampaign",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"url_api_activecampaign\"] }}"
+            },
+            {
+              "name": "id_pipeline_downsell_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_pipeline_downsell_crm\"] }}"
+            },
+            {
+              "name": "valor_produto_principal_em_centavos",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"valor_produto_principal_em_centavos\"] }}"
+            },
+            {
+              "name": "id_stage_desqualificado_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_stage_desqualificado_crm\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta0_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta0_crm\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta1_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta1_crm\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta2_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta2_crm\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta3_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta3_crm\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta4_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta4_crm\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta5_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta5_crm\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta6_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta6_crm\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta7_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta7_crm\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta8_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta8_crm\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta9_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta9_crm\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta10_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta10_crm\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta11_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta11_crm\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta12_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta12_crm\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta13_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta13_crm\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta14_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta14_crm\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta15_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta15_crm\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta16_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta16_crm\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta17_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta17_crm\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta18_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta18_crm\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta19_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta19_crm\"] }}"
+            },
+            {
+              "name": "id_campo_pergunta20_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_pergunta20_crm\"] }}"
+            },
+            {
+              "name": "id_campo_instagram_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_instagram_crm\"] }}"
+            },
+            {
+              "name": "id_ending_typeform",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_ending_typeform\"] }}"
+            },
+            {
+              "name": "id_campo_id_banco_de_dados_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_id_banco_de_dados_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_iddealac_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_iddealac_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_idleadac_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_idleadac_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_utm_source_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_utm_source_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_utm_campaign_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_utm_campaign_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_utm_term_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_utm_term_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_utm_medium_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_utm_medium_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_utm_content_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_utm_content_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_utm_fun_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_utm_fun_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_utm_var_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_utm_var_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_campo_instagram_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_instagram_bot_conversa\"] }}"
+            },
+            {
+              "name": "funil",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"funil\"] }}"
+            },
+            {
+              "name": "variacao_do_funil",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"variacao_do_funil\"] }}"
+            },
+            {
+              "name": "data_ultima_quinzena",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"data_ultima_quinzena\"] }}"
+            },
+            {
+              "name": "id_campo_emailse_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_emailse_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_tag_desqualificado_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_tag_desqualificado_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_tag_qualificado_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_tag_qualificado_bot_conversa\"] }}"
+            },
+            {
+              "name": "data_resposta_type",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"data_resposta_type\"]}}"
+            },
+            {
+              "name": "id_campo_data_resposta_type_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_data_resposta_type_bot_conversa\"]}}"
+            },
+            {
+              "name": "qualificacao",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"qualificacao\"]}}"
+            },
+            {
+              "name": "id_lead_bd",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_lead_bd\"]}}"
+            },
+            {
+              "name": "id_lead_bc",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_lead_bc\"]}}"
+            },
+            {
+              "name": "id_campo_id_lead_crm_bot_conversa",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_id_lead_crm_bot_conversa\"] }}"
+            },
+            {
+              "name": "id_lead_clickup",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_lead_clickup\"]}}"
+            },
+            {
+              "name": "id_fluxo_nao_agendou_10_min_desqualificados",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_fluxo_nao_agendou_10_min_desqualificados\"] }}"
+            },
+            {
+              "name": "id_campo_id_bc_crm",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_campo_id_bc_crm\"] }}"
+            },
+            {
+              "name": "id_fluxo_popular_campos",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_fluxo_popular_campos\"] }}"
+            },
+            {
+              "name": "id_deal_pipedrive",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_deal_pipedrive\"] }}"
+            },
+            {
+              "name": "id_person_pipedrive",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_person_pipedrive\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "815b0505-b579-48f1-a127-98bb1eac6579",
+      "name": "dados",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        1160,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "table": {
+          "__rl": true,
+          "value": "leads",
+          "mode": "list",
+          "cachedResultName": "leads"
+        },
+        "dataMode": "defineBelow",
+        "columnToMatchOn": "id_lead",
+        "valueToMatchOn": "={{ $node[\"pesquisa_lead5\"].json[\"id_lead\"] }}",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "id_person_pipedrive",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_person_pipedrive\"] }}"
+            },
+            {
+              "column": "id_deal_pipedrive",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"id_deal_pipedrive\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "detailedOutput": true
+        }
+      },
+      "id": "71702698-20e6-4054-9da6-6a629a2b31d6",
+      "name": "atualiza_id_pipedrive",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        1580,
+        560
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "OI4kAgzA41BNfgmQ",
+          "name": "[MySQL] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "table": {
+          "__rl": true,
+          "value": "aplicacoes",
+          "mode": "list",
+          "cachedResultName": "aplicacoes"
+        },
+        "dataMode": "defineBelow",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "id_lead",
+              "value": "={{ $node[\"pesquisa_lead5\"].json[\"id_lead\"] }}"
+            },
+            {
+              "column": "lojo_fisica_ou_fabricante_p0",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta0\"] }}"
+            },
+            {
+              "column": "captal_para_investir_em_produtos_p1",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta1\"] }}"
+            },
+            {
+              "column": "faturamento_liquido_mensal_p2",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta2\"] }}"
+            },
+            {
+              "column": "possui_conta_no_mercado_livre_p3",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta3\"] }}"
+            },
+            {
+              "column": "data_aplicacao",
+              "value": "={{ $now.toFormat('yyyy-MM-dd HH:mm:ss') }}"
+            },
+            {
+              "column": "faturamento_ml_ultimo_30_dias_p4",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta4\"] }}"
+            },
+            {
+              "column": "nicho_de_atuacao_deseja_trabalhar_p5",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta5\"] }}"
+            },
+            {
+              "column": "cidade/estado_p6",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta6\"] }}"
+            },
+            {
+              "column": "maior_dificuldade_p7",
+              "value": "={{ $node[\"chega_da_fila\"].json[\"content\"][\"pergunta7\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "detailedOutput": true
+        }
+      },
+      "id": "d91ab2a6-f6fa-41b4-9941-268a54191e4f",
+      "name": "insert_data_aplicacao",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        -620,
+        600
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "OI4kAgzA41BNfgmQ",
+          "name": "[MySQL] - Diego Rosa"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "chega_da_fila": [
+      {
+        "json": {
+          "fields": {
+            "consumerTag": "amq.ctag-RQv4r9wvjhpQl89FrFjINw",
+            "deliveryTag": 2,
+            "redelivered": false,
+            "exchange": "",
+            "routingKey": "Não Agendamentos - Parte 4 - Qualificado"
+          },
+          "properties": {
+            "headers": {}
+          },
+          "content": {
+            "Nome do Cliente": "Vitor Queiroz Teste",
+            "E-mail do Cliente": "vitorrqueiroztrafego@gmail.com",
+            "Telefone do Cliente - Formato BC": "+5519984574874",
+            "Telefone do Cliente - Formato Z-API": "5519984574874",
+            "utm_content": "content3",
+            "utm_source": "source1",
+            "utm_campaign": "campaign2",
+            "utm_medium": "medium4",
+            "utm_term": "term5",
+            "Instagram": "eu.vitorqueiroz",
+            "id_fluxo_nao_agendou_10_min": "",
+            "API-KEY": "",
+            "pergunta0": "Tenho loja física e não sou fabricante",
+            "pergunta1": "Não tenho dinheiro",
+            "pergunta2": "Até R$5.000",
+            "pergunta3": "Sim",
+            "pergunta4": "Até R$10.000",
+            "pergunta5": "nicho de atuação",
+            "pergunta6": "cidade/estado",
+            "pergunta7": "maior dificuldade",
+            "pergunta8": "",
+            "pergunta9": "",
+            "pergunta10": "",
+            "id_campo_pergunta0_bot_conversa": "",
+            "id_campo_pergunta1_bot_conversa": "",
+            "id_campo_pergunta2_bot_conversa": "",
+            "id_campo_pergunta3_bot_conversa": "",
+            "id_campo_pergunta4_bot_conversa": "",
+            "id_campo_pergunta5_bot_conversa": "",
+            "id_campo_pergunta6_bot_conversa": "",
+            "id_campo_pergunta7_bot_conversa": "",
+            "id_campo_pergunta8_bot_conversa": "",
+            "id_campo_pergunta9_bot_conversa": "",
+            "id_campo_pergunta10_bot_conversa": "",
+            "id_campo_pergunta11_bot_conversa": "",
+            "id_campo_pergunta12_bot_conversa": "",
+            "id_campo_pergunta13_bot_conversa": "",
+            "id_campo_pergunta14_bot_conversa": "",
+            "id_campo_pergunta15_bot_conversa": "",
+            "id_campo_pergunta16_bot_conversa": "",
+            "id_campo_pergunta17_bot_conversa": "",
+            "id_campo_pergunta18_bot_conversa": "",
+            "id_campo_pergunta19_bot_conversa": "",
+            "id_campo_pergunta20_bot_conversa": "",
+            "id_campo_pergunta0_crm": "f97e43d6de1fe58d8946274f4cc6c5b926abac50",
+            "id_campo_pergunta1_crm": "c885d2bf592a584cc89ee194878a1fb5382936a2",
+            "id_campo_pergunta2_crm": "f3f2ec8437e9807e2cbcea4a87fff7beac840a47",
+            "id_campo_pergunta3_crm": "c82363cbc1b9ac31b062f814fa7018a3e21b9552",
+            "id_campo_pergunta4_crm": "3909f9e17ec747c5d7a6e7a82fe83ad3a366ff84",
+            "id_campo_pergunta5_crm": "69070838c3c59827fd797c64cf35ae5232c8cc16",
+            "id_campo_pergunta6_crm": "f621e048f654726315c970b98a60e83e1b5ffe24",
+            "id_campo_pergunta7_crm": "cf410e4586d4c91938048bfbdca3beffd675e412",
+            "id_campo_instagram_crm": "a2bb5329df03b276501ee4f206fcb1654b1d6d6c",
+            "id_ending_typeform": "default_tys",
+            "id_campo_id_banco_de_dados_bot_conversa": "",
+            "id_campo_idleadac_bot_conversa": "",
+            "id_campo_utm_source_bot_conversa": "",
+            "id_campo_utm_campaign_bot_conversa": "",
+            "id_campo_utm_term_bot_conversa": "",
+            "id_campo_utm_medium_bot_conversa": "",
+            "id_campo_utm_content_bot_conversa": "",
+            "id_campo_utm_fun_bot_conversa": "",
+            "id_campo_utm_var_bot_conversa": "",
+            "id_campo_instagram_bot_conversa": "",
+            "funil": "sessao_estrategica",
+            "variacao_do_funil": "v1",
+            "data_ultima_quinzena": "2024-06-24",
+            "id_campo_emailse_bot_conversa": "",
+            "id_tag_desqualificado_bot_conversa": "",
+            "id_tag_qualificado_bot_conversa": "",
+            "data_resposta_type": "09/07/2024 12:02",
+            "qualificacao": "Qualificado",
+            "id_lead_bd": 41,
+            "id_lead_clickup": "",
+            "id_fluxo_nao_agendou_10_min_desqualificados": "",
+            "verificacao_lead": false,
+            "id_person_pipedrive": "52276",
+            "id_deal_pipedrive": "34576"
+          }
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2024-06-14T14:07:33.662Z",
+      "updatedAt": "2024-06-14T14:07:33.662Z",
+      "id": "1MIunzjT7OfEMLKl",
+      "name": "[NAG]"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2024-07-09T19:03:23.712Z",
+  "versionId": "a9777007-1089-4c5b-84fb-3eba6f40b3a5"
+}
