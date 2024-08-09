@@ -1,0 +1,654 @@
+{
+  "active": false,
+  "connections": {
+    "ler_planilha": {
+      "main": [
+        [
+          {
+            "node": "separa_em_linhas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "separa_em_linhas": {
+      "main": [
+        [
+          {
+            "node": "Item Lists1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "dados": {
+      "main": [
+        [
+          {
+            "node": "variaveis_evolution1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item Lists": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp Business Cloud1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "insere_telefone",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "separa_em_linhas1": {
+      "main": [
+        [
+          {
+            "node": "Item Lists",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "WhatsApp Business Cloud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "excluir_enviados": {
+      "main": [
+        [
+          {
+            "node": "dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "insere_telefone": {
+      "main": [
+        [
+          {
+            "node": "separa_em_linhas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "puxa_lista": {
+      "main": [
+        [
+          {
+            "node": "IF1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "atualiza_status": {
+      "main": [
+        [
+          {
+            "node": "3s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "variaveis_evolution1": {
+      "main": [
+        [
+          {
+            "node": "ler_planilha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF": {
+      "main": [
+        [
+          {
+            "node": "excluir_enviados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3s": {
+      "main": [
+        [
+          {
+            "node": "separa_em_linhas1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp Business Cloud": {
+      "main": [
+        [
+          {
+            "node": "atualiza_status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "separa_em_linhas1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item Lists1": {
+      "main": [
+        [
+          {
+            "node": "puxa_lista",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "15hrs": {
+      "main": [
+        [
+          {
+            "node": "IF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2024-07-22T15:35:45.275Z",
+  "id": "3S3RkcvLn2YEQxId",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "[API Oficial] - Disparo em Massa - 22/07 pré-matricula",
+  "nodes": [
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1nAFIXlkiH4yGxM708uwvxdz5Lxrr3E-i5NTu9i-3o_E",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1115792949,
+          "mode": "list",
+          "cachedResultName": "20240722_123429",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nAFIXlkiH4yGxM708uwvxdz5Lxrr3E-i5NTu9i-3o_E/edit#gid=1115792949"
+        },
+        "options": {}
+      },
+      "id": "51e3b10f-9908-4e0e-b093-efb740ec5552",
+      "name": "ler_planilha",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.1,
+      "position": [
+        -860,
+        480
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "exoLmMi20kOraoEG",
+          "name": "[Google Sheets] - Automagic Bots"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "c1f05bc6-f92a-4202-8bf5-7415459c5178",
+      "name": "separa_em_linhas",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -660,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "numero_notificacao",
+              "stringValue": "+5562981196678"
+            },
+            {
+              "name": "nome_responsavel",
+              "stringValue": "Mateus Diniz"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6b6509f3-0635-41dd-a760-3e7aa11545bb",
+      "name": "dados",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        -1220,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "limit",
+        "keep": "lastItems"
+      },
+      "id": "727e735c-14ad-4fe8-8145-a62977f9d5cd",
+      "name": "Item Lists",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3,
+      "position": [
+        400,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const telefoneOriginal = $node[\"separa_em_linhas\"].json[\"Número de telefone\"].toString();\n\n// Removendo caracteres não numéricos\nconst telefoneLimpo = telefoneOriginal.replace(/\\D/g, '');\n\n// Define o DDI padrão\nconst ddiPadrao = '55';\n\n// Extrai o DDD e o número, considerando que o telefone limpo pode já vir com o DDI\nlet ddd, numero;\nif (telefoneLimpo.startsWith(ddiPadrao)) {\n    // Se o número já começa com o DDI padrão, extrai sem o DDI\n    ddd = telefoneLimpo.slice(2, 4);\n    numero = telefoneLimpo.slice(4);\n} else {\n    // Se o número não contém o DDI, extrai o DDD e o número como estão\n    ddd = telefoneLimpo.slice(0, 2);\n    numero = telefoneLimpo.slice(2);\n}\n\n// Monta o número de telefone final, adicionando o DDI apenas se não estava presente\nconst telefoneFinal = telefoneLimpo.startsWith(ddiPadrao) ? ddiPadrao + ddd + numero : ddiPadrao + telefoneLimpo;\n\nreturn { telefonefinal: telefoneFinal };\n"
+      },
+      "id": "1ac9544f-651e-4162-89fa-77e55c6e5adc",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "78472419-a35f-4365-8ff8-1ee2af86479a",
+      "name": "separa_em_linhas1",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        180,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "deleteTable",
+        "table": {
+          "__rl": true,
+          "value": "disparos_em_massa",
+          "mode": "list",
+          "cachedResultName": "disparos_em_massa"
+        },
+        "deleteCommand": "delete",
+        "options": {}
+      },
+      "id": "1254fa81-47e9-4e9e-8979-607cbf7701e3",
+      "name": "excluir_enviados",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.2,
+      "position": [
+        -1400,
+        480
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "OI4kAgzA41BNfgmQ",
+          "name": "[MySQL] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "table": {
+          "__rl": true,
+          "value": "disparos_em_massa",
+          "mode": "list",
+          "cachedResultName": "disparos_em_massa"
+        },
+        "dataMode": "defineBelow",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "telefone",
+              "value": "={{ $node[\"Code\"].json[\"telefonefinal\"] }}"
+            },
+            {
+              "column": "nome",
+              "value": "={{ $node[\"separa_em_linhas\"].json[\"Nome\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d4eb320f-d34d-492d-9afb-4c2905b9a619",
+      "name": "insere_telefone",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.2,
+      "position": [
+        -220,
+        560
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "OI4kAgzA41BNfgmQ",
+          "name": "[MySQL] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "value": "disparos_em_massa",
+          "mode": "list",
+          "cachedResultName": "disparos_em_massa"
+        },
+        "returnAll": true,
+        "combineConditions": "OR",
+        "options": {}
+      },
+      "id": "7f3cdc08-1cc0-4a15-b99f-01c8a9cfd523",
+      "name": "puxa_lista",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.2,
+      "position": [
+        -220,
+        400
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "OI4kAgzA41BNfgmQ",
+          "name": "[MySQL] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "table": {
+          "__rl": true,
+          "value": "disparos_em_massa",
+          "mode": "list",
+          "cachedResultName": "disparos_em_massa"
+        },
+        "dataMode": "defineBelow",
+        "columnToMatchOn": "telefone",
+        "valueToMatchOn": "={{ $node[\"separa_em_linhas1\"].json[\"telefone\"] }}",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "status",
+              "value": "enviado"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2977b170-dc7b-4df2-b421-023470bcbe62",
+      "name": "atualiza_status",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.2,
+      "position": [
+        580,
+        500
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "OI4kAgzA41BNfgmQ",
+          "name": "[MySQL] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "limit"
+      },
+      "id": "096a7089-0460-4e43-b301-2c4bb030a95f",
+      "name": "Item Lists1",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3,
+      "position": [
+        -420,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "url_base",
+              "value": "https://evolutionapi.automagicbots.com.br"
+            },
+            {
+              "name": "apikey",
+              "value": "dpt5jlcem2fzana4jw5x8"
+            },
+            {
+              "name": "nome_da_instancia",
+              "value": "PaulaArdanza"
+            },
+            {
+              "name": "nome_evento"
+            },
+            {
+              "name": "link_do_audio"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0d654607-09be-4441-a9c8-0f913e96cd62",
+      "name": "variaveis_evolution1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        -1040,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $now.toFormat('dd/MM/yyyy') }}",
+              "value2": "22/07/2024"
+            }
+          ]
+        }
+      },
+      "id": "34483168-c572-4303-82e9-fcff61180640",
+      "name": "IF",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -1600,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 3
+      },
+      "id": "a4ceea42-4c9c-42b2-ac64-26d7eec030cd",
+      "name": "3s",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        780,
+        500
+      ],
+      "webhookId": "0b21f730-5c6b-4f2e-be8f-a10e970a0333"
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "300708243128017",
+        "recipientPhoneNumber": "=+{{ $node[\"separa_em_linhas1\"].json[\"telefone\"] }}",
+        "template": "22_07_pre_matricula|pt_BR",
+        "components": {
+          "component": [
+            {
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "text": "={{ $node[\"separa_em_linhas1\"].json[\"nome\"].split(' ')[0] }}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "id": "9eb8acd4-e98f-45d3-b2df-b97fc4f8ab54",
+      "name": "WhatsApp Business Cloud",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        400,
+        500
+      ],
+      "credentials": {
+        "whatsAppApi": {
+          "id": "uWn3sWudgapENreU",
+          "name": "[API Oficial WhatsApp] - Diego Rosa"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json[\"status\"] }}",
+              "value2": "enviado"
+            }
+          ]
+        }
+      },
+      "id": "d9f4f878-7cf6-40f0-93f8-4ec781df7a9d",
+      "name": "IF1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "300708243128017",
+        "recipientPhoneNumber": "={{ $node[\"dados\"].json[\"numero_notificacao\"] }}",
+        "template": "disparo_concluido|pt_BR"
+      },
+      "id": "926d1482-992a-4b8c-a10e-ff5098e3e9f2",
+      "name": "WhatsApp Business Cloud1",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        580,
+        320
+      ],
+      "credentials": {
+        "whatsAppApi": {
+          "id": "uWn3sWudgapENreU",
+          "name": "[API Oficial WhatsApp] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                4
+              ],
+              "triggerAtHour": 15
+            }
+          ]
+        }
+      },
+      "id": "31603959-837c-4932-83f7-91a5dd0a36af",
+      "name": "15hrs",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1760,
+        500
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "W42KfN49FgPKHRvQ",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveExecutionProgress": true
+  },
+  "staticData": {
+    "node:15hrs": {
+      "recurrencyRules": []
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2024-07-22T15:37:42.148Z",
+  "versionId": "8847b0c3-99a7-425c-abc4-53ce7a168f62"
+}
