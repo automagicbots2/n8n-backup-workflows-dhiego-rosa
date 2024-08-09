@@ -1,0 +1,463 @@
+{
+  "active": true,
+  "connections": {
+    "formata_dados": {
+      "main": [
+        [
+          {
+            "node": "dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "dados": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp Business Cloud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "captura_lancamento": {
+      "main": [
+        [
+          {
+            "node": "formata_dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "nao_existe2": {
+      "main": [
+        [
+          {
+            "node": "insere_dados2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "pesquisa_lead6": {
+      "main": [
+        [
+          {
+            "node": "Item Lists1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "insere_dados2": {
+      "main": [
+        [
+          {
+            "node": "insert_data_utm_lead2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item Lists1": {
+      "main": [
+        [
+          {
+            "node": "nao_existe2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp Business Cloud": {
+      "main": [
+        [
+          {
+            "node": "pesquisa_lead6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2024-07-09T14:40:10.123Z",
+  "id": "MbKl7OiKUUcH44MK",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "⌚[DHIEGO ROSA] - Captura Lançamento - Parte 1",
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "// Extrair informações do input\nconst inputData = items[0].json;\n\n// Format Number Internationally\nfunction formatarTelefone(telefone) {\n  const telefoneLimpo = telefone.replace(/[^\\d]/g, '');\n\n  let ddi = '55';\n  let ddd;\n  let telefoneFormatado;\n\n  // Verificar se o telefone começa com \"55\" antes de formatá-lo\n  if (telefoneLimpo.startsWith('55')) {\n    ddi = telefoneLimpo.slice(0, 2);\n    ddd = telefoneLimpo.slice(2, 4);\n    if (parseInt(ddd, 10) > 28) {\n      telefoneFormatado = ddi + ddd + telefoneLimpo.slice(-8);\n    } else {\n      telefoneFormatado = ddi + ddd + telefoneLimpo.slice(-9);\n    }\n  } else {\n    // Adicionar \"55\" ao número que não começa com \"55\"\n    ddd = telefoneLimpo.slice(0, 2);\n    if (parseInt(ddd, 10) > 28) {\n      telefoneFormatado = ddi + ddd + telefoneLimpo.slice(-8);\n    } else {\n      telefoneFormatado = ddi + ddd + telefoneLimpo.slice(-9);\n    }\n  }\n\n  return telefoneFormatado;\n}\n\n// Função para obter a data atual menos 15 dias no formato brasileiro (dia/mês/ano)\n/* function getDataMenos15Dias() {\n  const dataAtual = new Date();\n  dataAtual.setDate(dataAtual.getDate() - 15);\n  const dia = dataAtual.getDate().toString().padStart(2, '0');\n  const mes = (dataAtual.getMonth() + 1).toString().padStart(2, '0'); // +1 porque o mês começa em 0\n  const ano = dataAtual.getFullYear();\n  return ${ano}-${mes}-${dia};\n} */\n\n// Função para formatação de usernames do Instagram\nfunction formatarInstagram(username) {\n  if (username) {\n    // Remover espaços em branco extras\n    const usernameSemEspacos = username.trim();\n\n    // Converter para minúsculas\n    const usernameFormatado = usernameSemEspacos.toLowerCase();\n\n    return usernameFormatado;\n  }\n  return '';\n}\n\n// Função para extrair as UTMs do objeto JSON\nfunction extractUTMs(json) {\n  const utmParams = {};\n\n  function searchUTMs(obj) {\n    for (const key in obj) {\n      if (key.startsWith('utm_')) {\n        utmParams[key] = obj[key];\n      } else if (typeof obj[key] === 'object') {\n        searchUTMs(obj[key]);\n      }\n    }\n  }\n\n  searchUTMs(json);\n\n  return utmParams;\n}\n\n// Extrair as UTMs do objeto JSON de entrada\nconst utms = extractUTMs(inputData);\n\n// UTMS\nconst utmContent = utms.utm_content || '';\nconst utmSource = utms.utm_source || '';\nconst utmCampaign = utms.utm_campaign || '';\nconst utmMedium = utms.utm_medium || '';\nconst utmTerm = utms.utm_term || '';\n\n// Função para formatação de emails\nfunction formatarEmail(email) {\n  // Remover espaços em branco extras\n  const emailSemEspacos = email.trim();\n\n  // Converter para minúsculas\n  const emailFormatado = emailSemEspacos.toLowerCase();\n\n  return emailFormatado;\n}\n\n// Função para formatação de nomes\nfunction formatarNome(nome) {\n  if (nome) {\n    const palavras = nome.trim().split(/\\s+/);\n\n    const palavrasMinusculas = ['de', 'dos', 'da', 'e', 'do', 'das', 'di', 'du', 'o', 'a', 'u'];\n\n    for (let i = 0; i < palavras.length; i++) {\n      const palavraAtual = palavras[i].toLowerCase();\n      if (i === 0 || i === palavras.length - 1 || !palavrasMinusculas.includes(palavraAtual)) {\n        palavras[i] = palavraAtual.charAt(0).toUpperCase() + palavraAtual.slice(1);\n      } else {\n        palavras[i] = palavraAtual;\n      }\n    }\n\n    return palavras.join(\" \");\n  }\n  return '';\n}\n\n// Função para remover todas as aspas e parênteses de um texto\nfunction removerAspasEParenteses(texto) {\n    // Substitui todas as ocorrências de aspas (\"\") por nada\n    let textoSemAspas = texto.replace(/\"/g, '');\n    // Substitui todas as ocorrências de parênteses () por nada\n    textoSemAspas = textoSemAspas.replace(/\\([^()]*\\)/g, '');\n    return textoSemAspas;\n}\n\n// Data da aplicação em milissegundos\nconst dataAtualEmMilissegundos = new Date().getTime();\n\n// INFORMAÇÕES PESSOAIS\nconst nome = formatarNome($node[\"captura_lancamento\"].json[\"body\"][\"contact[first_name]\"]) || \"\";\nconst telefone = formatarTelefone($node[\"captura_lancamento\"].json[\"body\"][\"contact[phone]\"]) || '';\n//const instagram = formatarInstagram($node[\"captura_lancamento\"].json[\"body\"][\"InstagramOuSite\"]) || '';\nconst email = formatarEmail($node[\"captura_lancamento\"].json[\"body\"][\"contact[email]\"]) || \"\";\n\n// Montar o objeto de output\nconst output = {\n  \"Nome do Cliente\": nome,\n  \"E-mail do Cliente\": email,\n  \"Telefone do Cliente - Formato BC\": '+' + telefone,\n  \"Telefone do Cliente - Formato Z-API\": telefone,\n  //instagram,\n  utm_content: utmContent,\n  utm_source: utmSource,\n  utm_campaign: utmCampaign,\n  utm_medium: utmMedium,\n  utm_term: utmTerm,\n  //pontuacao: pontuacao,\n  //data_ultima_quinzena: getDataMenos15Dias(),\n  //qualificacao: qualificacao,\n  data_aplicacao: dataAtualEmMilissegundos\n};\n\nreturn [output];\n"
+      },
+      "id": "ea61320e-047c-42e3-a7ca-612b847e8ee7",
+      "name": "formata_dados",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        760,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "300708243128017",
+        "recipientPhoneNumber": "={{ $json[\"Telefone do Cliente - Formato BC\"] }}",
+        "template": "lc_boasvindas_072024_botao|pt_BR",
+        "components": {
+          "component": [
+            {
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "text": "={{ $json[\"Nome do Cliente\"].split(' ')[0] }}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "id": "76440cc0-d0fb-458a-84eb-73ed94739f82",
+      "name": "WhatsApp Business Cloud",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        280
+      ],
+      "credentials": {
+        "whatsAppApi": {
+          "id": "uWn3sWudgapENreU",
+          "name": "[API Oficial WhatsApp] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9d053f61-2e0d-4d63-862e-bf13e5529878",
+              "name": "Nome do Cliente",
+              "value": "={{ $json[\"Nome do Cliente\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "f8d90fe7-e8a6-42f2-bfe4-60ed35f33fb8",
+              "name": "E-mail do Cliente",
+              "value": "={{ $json[\"E-mail do Cliente\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "6b5e70d6-e775-463f-981c-b81e2ae24b7b",
+              "name": "Telefone do Cliente - Formato BC",
+              "value": "={{ $json[\"Telefone do Cliente - Formato BC\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "f81d577c-56c7-49e2-badc-de2abc56d904",
+              "name": "Telefone do Cliente - Formato Z-API",
+              "value": "={{ $json[\"Telefone do Cliente - Formato Z-API\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "f94b405c-1b85-4b68-b9bb-2187cde20176",
+              "name": "",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "16f9210b-5200-4d6a-9471-6093c3f674e3",
+      "name": "dados",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        980,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "captura-lancamento",
+        "options": {}
+      },
+      "id": "abcdf6f4-312c-46a3-aec6-1a639de587d2",
+      "name": "captura_lancamento",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        560,
+        280
+      ],
+      "webhookId": "4f650f7a-0249-4e63-8988-cf94bd764e86"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $node[\"pesquisa_lead6\"].json[\"success\"] }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "63540e6a-5690-42a0-894c-476412d7050c",
+      "name": "nao_existe2",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1760,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "value": "leads",
+          "mode": "list",
+          "cachedResultName": "leads"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "email",
+              "value": "={{ $node[\"dados\"].json[\"E-mail do Cliente\"]  || '-----------------------'}}"
+            },
+            {
+              "column": "telefone",
+              "value": "={{ $node[\"dados\"].json[\"Telefone do Cliente - Formato Z-API\"]|| '-----------------------'}}"
+            },
+            {
+              "column": "telefone_empresa",
+              "value": "={{ $node[\"dados\"].json[\"Telefone do Cliente - Formato Z-API\"] || '-----------------------'}}"
+            },
+            {
+              "column": "email2",
+              "value": "={{ $node[\"dados\"].json[\"E-mail do Cliente\"] || '-----------------------'}}"
+            }
+          ]
+        },
+        "combineConditions": "OR",
+        "options": {
+          "detailedOutput": false
+        }
+      },
+      "id": "795b2ca5-43fd-4e62-b2e9-11a226f72052",
+      "name": "pesquisa_lead6",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        1400,
+        280
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "OI4kAgzA41BNfgmQ",
+          "name": "[MySQL] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "table": {
+          "__rl": true,
+          "value": "leads_2_utms",
+          "mode": "list",
+          "cachedResultName": "leads_2_utms"
+        },
+        "dataMode": "defineBelow",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "id_lead",
+              "value": "={{ $node[\"insere_dados2\"].json[\"data\"][\"insertId\"] }}"
+            },
+            {
+              "column": "utm_source",
+              "value": "={{ $node[\"formata_dados\"].json[\"utm_source\"] }}"
+            },
+            {
+              "column": "utm_campaign",
+              "value": "={{ $node[\"formata_dados\"].json[\"utm_campaign\"] }}"
+            },
+            {
+              "column": "utm_term",
+              "value": "={{ $node[\"formata_dados\"].json[\"utm_term\"] }}"
+            },
+            {
+              "column": "utm_medium",
+              "value": "={{ $node[\"formata_dados\"].json[\"utm_medium\"] }}"
+            },
+            {
+              "column": "utm_content",
+              "value": "={{ $node[\"formata_dados\"].json[\"utm_content\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "queryBatching": "single",
+          "detailedOutput": true
+        }
+      },
+      "id": "9aba87ac-d847-4a9a-a349-c0dfbc85a3c2",
+      "name": "insert_data_utm_lead2",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        2160,
+        200
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "OI4kAgzA41BNfgmQ",
+          "name": "[MySQL] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "table": {
+          "__rl": true,
+          "value": "leads",
+          "mode": "list",
+          "cachedResultName": "leads"
+        },
+        "dataMode": "defineBelow",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "nome",
+              "value": "={{ $node[\"dados\"].json[\"Nome do Cliente\"].split(' ')[0] }}"
+            },
+            {
+              "column": "email",
+              "value": "={{ $node[\"dados\"].json[\"E-mail do Cliente\"] }}"
+            },
+            {
+              "column": "telefone",
+              "value": "={{ $node[\"dados\"].json[\"Telefone do Cliente - Formato Z-API\"] }}"
+            },
+            {
+              "column": "sobrenome",
+              "value": "={{ $node[\"dados\"].json[\"Nome do Cliente\"].split(\" \").slice(1).join(\" \") }}"
+            },
+            {
+              "column": "update_time",
+              "value": "={{ $now.toFormat('yyyy-MM-dd HH:mm:ss') }}"
+            },
+            {
+              "column": "id_lead_activecampaign",
+              "value": "={{ $node[\"captura_lancamento\"].json[\"body\"][\"contact[id]\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "detailedOutput": true
+        }
+      },
+      "id": "23da0dc7-4bd1-423d-b560-9ba7d04c6795",
+      "name": "insere_dados2",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        2000,
+        200
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "OI4kAgzA41BNfgmQ",
+          "name": "[MySQL] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "limit",
+        "keep": "lastItems"
+      },
+      "id": "79852db0-a06b-4af4-891d-59dd6ee0ba69",
+      "name": "Item Lists1",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3,
+      "position": [
+        1580,
+        280
+      ]
+    }
+  ],
+  "pinData": {
+    "captura_lancamento": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8nwebhookdiegorosa.automagicbots.com.br",
+            "user-agent": "GuzzleHttp/6.5.5 curl/8.3.0 PHP/8.1.29",
+            "content-length": "505",
+            "content-type": "application/x-www-form-urlencoded",
+            "x-forwarded-for": "54.225.1.90",
+            "x-forwarded-host": "n8nwebhookdiegorosa.automagicbots.com.br",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "73bda55f1b58",
+            "x-real-ip": "54.225.1.90",
+            "accept-encoding": "gzip"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "contact[id]": "182755",
+            "contact[email]": "mateusdiniz@automagicbots.com.br",
+            "contact[first_name]": "Mateus Diniz",
+            "contact[last_name]": "",
+            "contact[phone]": "(62) 98119-6678",
+            "contact[orgname]": "",
+            "contact[customer_acct_name]": "",
+            "contact[tags]": "proximo-nivel",
+            "contact[ip4]": "127.0.0.1",
+            "contact[fields][utmsourcevendas]": "",
+            "contact[fields][utmmediumvendas]": "",
+            "contact[fields][utmcampaignvendas]": "",
+            "contact[fields][utmtermvendas]": "",
+            "contact[fields][utmcontentvendas]": "",
+            "seriesid": "61"
+          },
+          "webhookUrl": "https://n8nwebhookdiegorosa.automagicbots.com.br/webhook/captura-lancamento",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "W42KfN49FgPKHRvQ"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2024-07-09T21:45:40.228Z",
+  "versionId": "90819099-0293-4eb4-9a8c-e63efac2b2e5"
+}
