@@ -1,0 +1,217 @@
+{
+  "active": true,
+  "connections": {
+    "Set": {
+      "main": [
+        [
+          {
+            "node": "é_proxima_turma",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "é_proxima_turma": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp Business Cloud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "entrou_lista_espera": {
+      "main": [
+        [
+          {
+            "node": "Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2024-05-27T12:40:08.568Z",
+  "id": "FINEY8bEc3SpG2d4",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "⌚[WPP OFICIAL] [DHIEGO ROSA] Disparo lista de espera",
+  "nodes": [
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "numero",
+              "value": "={{ $json[\"body\"][\"contact[phone]\"].replace(/[^\\d]/g, '')}}"
+            },
+            {
+              "name": "Tag",
+              "value": "={{ $json[\"body\"][\"contact[tags]\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "34ab5976-2fb4-4f97-ba53-f42c07e2a084",
+      "name": "Set",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        480,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "300708243128017",
+        "recipientPhoneNumber": "=+{{ $json[\"telefonefinal\"] }}",
+        "template": "lista_espera_julho2024|pt_BR"
+      },
+      "id": "b707638b-260d-4bd3-a766-c5562079b455",
+      "name": "WhatsApp Business Cloud",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        1180,
+        160
+      ],
+      "credentials": {
+        "whatsAppApi": {
+          "id": "uWn3sWudgapENreU",
+          "name": "[API Oficial WhatsApp] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "a1f15314-1b19-42f7-b875-9ab0fb837d5d",
+              "leftValue": "={{ $json[\"Tag\"] }}",
+              "rightValue": "proxima-turma-20",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "ce9239a0-07e8-4c68-be41-d8fec9a95088",
+      "name": "é_proxima_turma",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        700,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const telefoneOriginal = $node[\"é_proxima_turma\"].json[\"numero\"].toString();\n\n// Removendo caracteres não numéricos\nconst telefoneLimpo = telefoneOriginal.replace(/\\D/g, '');\n\n// Define o DDI padrão\nconst ddiPadrao = '55';\n\n// Extrai o DDD e o número, considerando que o telefone limpo pode já vir com o DDI\nlet ddd, numero;\nif (telefoneLimpo.startsWith(ddiPadrao)) {\n    // Se o número já começa com o DDI padrão, extrai sem o DDI\n    ddd = telefoneLimpo.slice(2, 4);\n    numero = telefoneLimpo.slice(4);\n} else {\n    // Se o número não contém o DDI, extrai o DDD e o número como estão\n    ddd = telefoneLimpo.slice(0, 2);\n    numero = telefoneLimpo.slice(2);\n}\n\n// Monta o número de telefone final, adicionando o DDI apenas se não estava presente\nconst telefoneFinal = telefoneLimpo.startsWith(ddiPadrao) ? ddiPadrao + ddd + numero : ddiPadrao + telefoneLimpo;\n\nreturn { telefonefinal: telefoneFinal };\n"
+      },
+      "id": "cdb57767-662e-4dc8-8264-62ea7842a1dd",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        920,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lista-espera-07-2024",
+        "options": {}
+      },
+      "id": "6daefede-6c93-4c40-a886-f2dc630d018c",
+      "name": "entrou_lista_espera",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [
+        280,
+        220
+      ],
+      "webhookId": "1068744b-a81d-4f56-ab9c-f80b94dc142a"
+    }
+  ],
+  "pinData": {
+    "entrou_lista_espera": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8nwebhookdiegorosa.automagicbots.com.br",
+            "user-agent": "GuzzleHttp/6.5.5 curl/8.3.0 PHP/8.1.23",
+            "content-length": "536",
+            "content-type": "application/x-www-form-urlencoded",
+            "x-forwarded-for": "52.2.43.221",
+            "x-forwarded-host": "n8nwebhookdiegorosa.automagicbots.com.br",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "73bda55f1b58",
+            "x-real-ip": "52.2.43.221",
+            "accept-encoding": "gzip"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "contact[id]": "179920",
+            "contact[email]": "dhieeego@gmail.com",
+            "contact[first_name]": "Dhiego Rosa",
+            "contact[last_name]": "",
+            "contact[phone]": "(11) 98947-3088",
+            "contact[orgname]": "",
+            "contact[customer_acct_name]": "",
+            "contact[tags]": "lead-quente, lead-superquente, proxima-turma-20",
+            "contact[ip4]": "127.0.0.1",
+            "contact[fields][utmsourcevendas]": "",
+            "contact[fields][utmmediumvendas]": "",
+            "contact[fields][utmcampaignvendas]": "",
+            "contact[fields][utmtermvendas]": "",
+            "contact[fields][utmcontentvendas]": "",
+            "seriesid": "58"
+          },
+          "webhookUrl": "https://n8nwebhookdiegorosa.automagicbots.com.br/webhook/lista-espera-07-2024",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "W42KfN49FgPKHRvQ"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2024-05-27T15:58:58.263Z",
+  "versionId": "9d394122-c7dc-4436-aa92-3ebbcc278f16"
+}
