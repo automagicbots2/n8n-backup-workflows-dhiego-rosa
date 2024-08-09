@@ -1,0 +1,3260 @@
+{
+  "active": true,
+  "connections": {
+    "formata_dados": {
+      "main": [
+        [
+          {
+            "node": "dados_validados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "dados_validados": {
+      "main": [
+        [
+          {
+            "node": "entra_na_fila",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "formulario_de_pesquisa": {
+      "main": [
+        [
+          {
+            "node": "formata_dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "dados_validados1": {
+      "main": [
+        [
+          {
+            "node": "entra_na_fila1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "formulario_sessao_estrategica": {
+      "main": [
+        [
+          {
+            "node": "formata_dados1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "formata_dados1": {
+      "main": [
+        [
+          {
+            "node": "dados_validados1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2024-06-14T14:06:18.010Z",
+  "id": "f07ugouIpu1dZQ42",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "⌚[DHIEGO ROSA] - Aplicação Preenchida - Parte 1",
+  "nodes": [
+    {
+      "parameters": {
+        "queue": "Não Agendamentos - Parte 2",
+        "options": {
+          "arguments": {
+            "argument": [
+              {
+                "key": "x-queue-type",
+                "value": "quorum"
+              }
+            ]
+          },
+          "durable": true
+        }
+      },
+      "id": "97b6841a-e0e0-4d07-b0d5-6b67b3ca6902",
+      "name": "entra_na_fila",
+      "type": "n8n-nodes-base.rabbitmq",
+      "typeVersion": 1,
+      "position": [
+        1180,
+        280
+      ],
+      "credentials": {
+        "rabbitmq": {
+          "id": "lHkljF71xS7ATT1K",
+          "name": "[RabbitMQ] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extrair informações do input\nconst inputData = items[0].json;\nconst respostas = inputData.body.form_response.answers;\n\n//Formatar número Internacional\nfunction formatarTelefone(telefone) {\n  const telefoneLimpo = telefone.replace(/[^\\d]/g, '');\n\n  let ddi;\n  let ddd;\n  let telefoneFormatado;\n\n  // Verificar se o telefone começa com \"55\" antes de formatá-lo\n  if (telefoneLimpo.startsWith('55')) {\n    ddi = telefoneLimpo.slice(0, 2);\n    ddd = telefoneLimpo.slice(2, 4);\n    if (parseInt(ddd, 10) > 28) {\n      telefoneFormatado = ddi + ddd + telefoneLimpo.slice(-8);\n    } else {\n      telefoneFormatado = ddi + ddd + telefoneLimpo.slice(-9);\n    }\n  } else {\n    // Se o DDI for diferente de 55, manter o número como está\n    telefoneFormatado = telefoneLimpo;\n  }\n\n  return telefoneFormatado;\n}\n\n// Função para obter a data atual menos 15 dias no formato brasileiro (dia/mês/ano)\n\n/* function getDataMenos15Dias() {\n  const dataAtual = new Date();\n  dataAtual.setDate(dataAtual.getDate() - 15);\n  const dia = dataAtual.getDate().toString().padStart(2, '0');\n  const mes = (dataAtual.getMonth() + 1).toString().padStart(2, '0'); // +1 porque o mês começa em 0\n  const ano = dataAtual.getFullYear();\n  return ${ano}-${mes}-${dia};\n} */\n\n// Função para formatação de usernames do Instagram\nfunction formatarInstagram(username) {\n  if (username) {\n    // Remover espaços em branco extras\n    const usernameSemEspacos = username.trim();\n\n    // Converter para minúsculas\n    const usernameFormatado = usernameSemEspacos.toLowerCase();\n\n    return usernameFormatado;\n  }\n  return '';\n}\n\n// Função para extrair as UTMs do objeto JSON\nfunction extractUTMs(json) {\n  const utmParams = {};\n\n  function searchUTMs(obj) {\n    for (const key in obj) {\n      if (key.startsWith('utm_')) {\n        utmParams[key] = obj[key];\n      } else if (typeof obj[key] === 'object') {\n        searchUTMs(obj[key]);\n      }\n    }\n  }\n\n  searchUTMs(json);\n\n  return utmParams;\n}\n\n// Extrair as UTMs do objeto JSON de entrada\nconst utms = extractUTMs(inputData);\n\n// UTMS\nconst utmContent = utms.utm_content || '';\nconst utmSource = utms.utm_source || '';\nconst utmCampaign = utms.utm_campaign || '';\nconst utmMedium = utms.utm_medium || '';\nconst utmTerm = utms.utm_term || '';\n\n// Função para formatação de emails\nfunction formatarEmail(email) {\n  // Remover espaços em branco extras\n  const emailSemEspacos = email.trim();\n\n  // Converter para minúsculas\n  const emailFormatado = emailSemEspacos.toLowerCase();\n\n  return emailFormatado;\n}\n\n// Função para formatação de nomes\nfunction formatarNome(nome) {\n  if (nome) {\n    const palavras = nome.trim().split(/\\s+/);\n\n    const palavrasMinusculas = ['de', 'dos', 'da', 'e', 'do', 'das', 'di', 'du', 'o', 'a', 'u'];\n\n    for (let i = 0; i < palavras.length; i++) {\n      const palavraAtual = palavras[i].toLowerCase();\n      if (i === 0 || i === palavras.length - 1 || !palavrasMinusculas.includes(palavraAtual)) {\n        palavras[i] = palavraAtual.charAt(0).toUpperCase() + palavraAtual.slice(1);\n      } else {\n        palavras[i] = palavraAtual;\n      }\n    }\n\n    return palavras.join(\" \");\n  }\n  return '';\n}\n\n// Função para remover todas as aspas e parênteses de um texto\nfunction removerAspasEParenteses(texto) {\n    // Substitui todas as ocorrências de aspas (\"\") por nada\n    let textoSemAspas = texto.replace(/\"/g, '');\n    // Substitui todas as ocorrências de parênteses () por nada\n    textoSemAspas = textoSemAspas.replace(/\\([^()]*\\)/g, '');\n    return textoSemAspas;\n}\n\n// Data da aplicação em milissegundos\nconst dataAtualEmMilissegundos = new Date().getTime();\n\n// INFORMAÇÕES PESSOAIS\nconst nome = formatarNome($node[\"formulario_de_pesquisa\"].json[\"body\"][\"form_response\"][\"answers\"][\"0\"][\"text\"]) || \"\";\nconst telefone = formatarTelefone($node[\"formulario_de_pesquisa\"].json[\"body\"][\"form_response\"][\"answers\"][\"1\"][\"phone_number\"]) || '';\n//const instagram = formatarInstagram($node[\"formulario_de_pesquisa\"].json[\"body\"][\"InstagramOuSite\"]) || '';\nconst email = formatarEmail($node[\"formulario_de_pesquisa\"].json[\"body\"][\"form_response\"][\"answers\"][\"2\"][\"email\"]) || \"\";\n\n// Função para extrair respostas de múltipla escolha\nfunction extrairResposta(fieldRef) {\n  const resposta = respostas.find(answer => answer.field.ref === fieldRef);\n  if (resposta) {\n    if (resposta.choice) {\n      return resposta.choice.label;\n    } else if (resposta.choices) {\n      return resposta.choices.labels.join(', ');\n    }\n  }\n  return '';\n}\n\n// PERGUNTAS\nconst pergunta0 = extrairResposta(\"01FJSAWQ3RNRMTG38RWVMBG5NJ\");\nconst pergunta1 = extrairResposta(\"dcbc2d7f-a75a-4986-b6f5-db02d6b96d6a\") || '';\nconst pergunta2 = extrairResposta(\"b5c078b2-1d9f-444c-9f20-b9f88a05aef0\") || '';\nconst pergunta3 = extrairResposta(\"8af1e2e4-7da7-41e1-ab2d-07542500de87\") || '';\nconst pergunta4 = extrairResposta(\"2c63b5f4-3edf-436d-9227-0ba9639bfe8e\") || '';\nconst pergunta5 = extrairResposta(\"6199f40e-82de-44d8-901a-e5e97ba05159\") || '';\nconst pergunta6 = extrairResposta(\"25b21709-dd00-45cd-9f46-057b6f1f0f8c\") || '';\nconst pergunta7 = extrairResposta(\"c949da17-739f-4995-ad8b-3a570b3583d9\") || '';\nconst pergunta8 = extrairResposta(\"ddf72753-9945-421e-b9a7-07a3fd5427a6\") || '';\nconst pergunta9 = extrairResposta(\"2802e880-1e27-4b87-b2a2-d8a11cfaae44\")  || extrairResposta(\"3c797956-28da-46d0-8692-c317596cdb3f\") || '';\nconst pergunta10 = respostas.find(answer => answer.field.ref === \"8330711e-ed8e-4218-874d-9f170ed2f11c\")?.text || '';\nconst pergunta11 = extrairResposta(\"c0e48927-96b4-42fd-af5e-11e922e1688b\");\nconst pergunta12 = respostas.find(answer => answer.field.ref === \"228008a1-41ac-42e4-af6d-f62634f11074\")?.text || '';\nconst pergunta13 = extrairResposta(\"ce4bb126-c3ce-4499-8f11-78bb05c7616d\");\nconst pergunta14 = respostas.find(answer => answer.field.ref === \"61916979-5d1a-40a7-bfae-bd30f0ed3f8c\")?.text || '';\nconst pergunta16 = extrairResposta(\"739b35c1-ec20-419b-a866-763217399a39\");\nconst pergunta17 = $node[\"formulario_de_pesquisa\"].json[\"body\"][\"pergunta17\"] || '';\nconst pergunta18 = $node[\"formulario_de_pesquisa\"].json[\"body\"][\"pergunta18\"] || '';\nconst pergunta19 = $node[\"formulario_de_pesquisa\"].json[\"body\"][\"pergunta19\"] || '';\nconst pergunta20 = $node[\"formulario_de_pesquisa\"].json[\"body\"][\"pergunta20\"] || '';\n\n//const qualificacao = $node[\"formulario_de_pesquisa\"].json[\"body\"][\"respondent\"][\"score\"] || '';\nconst data_aplicacao_completa = $node[\"formulario_de_pesquisa\"].json[\"body\"][\"form_response\"][\"submitted_at\"] || '';\n//const pontuacao = $node[\"formulario_de_pesquisa\"].json[\"body\"][\"form_response\"][\"variables\"][\"3\"][\"number\"] || '';\nconst endings = $node[\"formulario_de_pesquisa\"].json[\"body\"][\"form_response\"][\"ending\"][\"ref\"] || '';\n\n// Montar o objeto de output\nconst output = {\n  \"Nome do Cliente\": nome,\n  \"E-mail do Cliente\": email,\n  \"Telefone do Cliente - Formato BC\": '+' + telefone,\n  \"Telefone do Cliente - Formato Z-API\": telefone,\n  //instagram,\n  pergunta0,\n  pergunta1,\n  pergunta2,\n  pergunta3,\n  pergunta4,\n  pergunta5,\n  pergunta6,\n  pergunta7,\n  pergunta8,\n  pergunta9,\n  pergunta10,\n  pergunta11,\n  pergunta12,\n  pergunta13,\n  pergunta14,\n  //pergunta15,\n  pergunta16,\n  pergunta17,\n  pergunta18,\n  pergunta19,\n  pergunta20,\n  utm_content: utmContent,\n  utm_source: utmSource,\n  utm_campaign: utmCampaign,\n  utm_medium: utmMedium,\n  utm_term: utmTerm,\n  //pontuacao: pontuacao,\n  endings: endings,\n  data_aplicacao_completa: data_aplicacao_completa,\n  //data_ultima_quinzena: getDataMenos15Dias(),\n  //qualificacao: qualificacao,\n  data_aplicacao: dataAtualEmMilissegundos\n};\n\nreturn [output];"
+      },
+      "id": "1a85e4d3-dac3-4954-aae5-c77f525599d1",
+      "name": "formata_dados",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        760,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "Nome do Cliente",
+              "value": "={{ $node[\"formata_dados\"].json[\"Nome do Cliente\"] }}"
+            },
+            {
+              "name": "E-mail do Cliente",
+              "value": "={{ $node[\"formata_dados\"].json[\"E-mail do Cliente\"] }}"
+            },
+            {
+              "name": "Telefone do Cliente - Formato BC",
+              "value": "={{ $node[\"formata_dados\"].json[\"Telefone do Cliente - Formato BC\"] }}"
+            },
+            {
+              "name": "Telefone do Cliente - Formato Z-API",
+              "value": "={{ $node[\"formata_dados\"].json[\"Telefone do Cliente - Formato Z-API\"] }}"
+            },
+            {
+              "name": "Instagram",
+              "value": "="
+            },
+            {
+              "name": "pergunta0",
+              "value": "={{ $node[\"formata_dados\"].json[\"pergunta0\"] }}"
+            },
+            {
+              "name": "pergunta1",
+              "value": "={{ $node[\"formata_dados\"].json[\"pergunta1\"] }}"
+            },
+            {
+              "name": "pergunta2",
+              "value": "={{ $node[\"formata_dados\"].json[\"pergunta2\"] }}"
+            },
+            {
+              "name": "pergunta3",
+              "value": "={{ $node[\"formata_dados\"].json[\"pergunta3\"] }}"
+            },
+            {
+              "name": "pergunta4",
+              "value": "={{ $node[\"formata_dados\"].json[\"pergunta4\"] }}"
+            },
+            {
+              "name": "pergunta5",
+              "value": "={{ $node[\"formata_dados\"].json[\"pergunta5\"] }}"
+            },
+            {
+              "name": "pergunta6",
+              "value": "={{ $node[\"formata_dados\"].json[\"pergunta6\"] }}"
+            },
+            {
+              "name": "pergunta7",
+              "value": "={{ $node[\"formata_dados\"].json[\"pergunta7\"] }}"
+            },
+            {
+              "name": "pergunta8",
+              "value": "={{ $node[\"formata_dados\"].json[\"pergunta8\"] }}"
+            },
+            {
+              "name": "pergunta9",
+              "value": "={{ $node[\"formata_dados\"].json[\"pergunta9\"] }}"
+            },
+            {
+              "name": "pergunta10",
+              "value": "={{ $node[\"formata_dados\"].json[\"pergunta10\"] }}"
+            },
+            {
+              "name": "pergunta11",
+              "value": "={{ $node[\"formata_dados\"].json[\"pergunta11\"] }}"
+            },
+            {
+              "name": "pergunta12",
+              "value": "={{ $node[\"formata_dados\"].json[\"pergunta12\"] }}"
+            },
+            {
+              "name": "pergunta13",
+              "value": "={{ $node[\"formata_dados\"].json[\"pergunta13\"] }}"
+            },
+            {
+              "name": "pergunta14",
+              "value": "={{ $node[\"formata_dados\"].json[\"pergunta14\"] }}"
+            },
+            {
+              "name": "pergunta15",
+              "value": "={{ $node[\"formata_dados\"].json[\"pergunta15\"] }}"
+            },
+            {
+              "name": "pergunta16",
+              "value": "={{ $node[\"formata_dados\"].json[\"pergunta16\"] }}"
+            },
+            {
+              "name": "pergunta17",
+              "value": "={{ $node[\"formata_dados\"].json[\"pergunta17\"] }}"
+            },
+            {
+              "name": "pergunta18",
+              "value": "={{ $node[\"formata_dados\"].json[\"pergunta18\"] }}"
+            },
+            {
+              "name": "pergunta19",
+              "value": "={{ $node[\"formata_dados\"].json[\"pergunta19\"] }}"
+            },
+            {
+              "name": "pergunta20",
+              "value": "={{ $node[\"formata_dados\"].json[\"pergunta20\"] }}"
+            },
+            {
+              "name": "utm_content",
+              "value": "={{ $node[\"formata_dados\"].json[\"utm_content\"] }}"
+            },
+            {
+              "name": "utm_source",
+              "value": "={{ $node[\"formata_dados\"].json[\"utm_source\"] }}"
+            },
+            {
+              "name": "utm_campaign",
+              "value": "={{ $node[\"formata_dados\"].json[\"utm_campaign\"] }}"
+            },
+            {
+              "name": "utm_medium",
+              "value": "={{ $node[\"formata_dados\"].json[\"utm_medium\"] }}"
+            },
+            {
+              "name": "utm_term",
+              "value": "={{ $node[\"formata_dados\"].json[\"utm_term\"] }}"
+            },
+            {
+              "name": "data_resposta_type",
+              "value": "={{$now.toFormat('dd/MM/yyyy HH:mm')}}"
+            },
+            {
+              "name": "data_ultima_quinzena",
+              "value": "={{ $node[\"formata_dados\"].json[\"data_ultima_quinzena\"] }}"
+            },
+            {
+              "name": "id_fluxo_nao_agendou_10_min"
+            },
+            {
+              "name": "id_fluxo_nao_agendou_10_min_desqualificados"
+            },
+            {
+              "name": "API-KEY"
+            },
+            {
+              "name": "id_campo_id_banco_de_dados_bot_conversa"
+            },
+            {
+              "name": "id_campo_utm_source_bot_conversa"
+            },
+            {
+              "name": "id_campo_utm_campaign_bot_conversa"
+            },
+            {
+              "name": "id_campo_utm_term_bot_conversa"
+            },
+            {
+              "name": "id_campo_utm_medium_bot_conversa"
+            },
+            {
+              "name": "id_campo_utm_content_bot_conversa"
+            },
+            {
+              "name": "id_campo_utm_fun_bot_conversa"
+            },
+            {
+              "name": "id_campo_utm_var_bot_conversa"
+            },
+            {
+              "name": "id_campo_instagram_bot_conversa"
+            },
+            {
+              "name": "id_campo_emailse_bot_conversa"
+            },
+            {
+              "name": "id_tag_medio_qualificado_bot_conversa"
+            },
+            {
+              "name": "id_tag_desqualificado_bot_conversa"
+            },
+            {
+              "name": "id_tag_qualificado_bot_conversa"
+            },
+            {
+              "name": "id_campo_iddealac_bot_conversa"
+            },
+            {
+              "name": "id_campo_idleadac_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta0_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta1_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta2_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta3_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta4_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta5_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta6_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta7_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta8_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta9_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta10_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta11_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta12_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta13_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta14_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta15_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta16_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta17_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta18_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta19_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta20_bot_conversa"
+            },
+            {
+              "name": "id_campo_data_da_aplicacao_bot_conversa",
+              "value": "2249943"
+            },
+            {
+              "name": "id_ending_typeform",
+              "value": "={{ $node[\"formulario_de_pesquisa\"].json[\"body\"][\"form_response\"][\"form_id\"] }}"
+            },
+            {
+              "name": "id_pipeline_downsell_produto_1_crm"
+            },
+            {
+              "name": "valor_produto_downsell_em_centavos_produto_1_crm"
+            },
+            {
+              "name": "id_pipeline_downsell_produto_2_crm"
+            },
+            {
+              "name": "valor_produto_downsell_em_centavos_produto_2_crm"
+            },
+            {
+              "name": "id_pipeline_crm"
+            },
+            {
+              "name": "valor_produto_principal_em_centavos_crm"
+            },
+            {
+              "name": "url_api_activecampaign_crm"
+            },
+            {
+              "name": "Api-Token"
+            },
+            {
+              "name": "id_sdr_crm"
+            },
+            {
+              "name": "funil",
+              "value": "sessao estrategica"
+            },
+            {
+              "name": "variacao_do_funil",
+              "value": "respondeu_pesquisa"
+            },
+            {
+              "name": "id_stage_preencheu_aplicacao_crm"
+            },
+            {
+              "name": "id_stage_desqualificado_produto_1_crm"
+            },
+            {
+              "name": "id_stage_desqualificadoproduto_2_crm"
+            },
+            {
+              "name": "id_campo_id_banco_de_dados_crm"
+            },
+            {
+              "name": "id_campo_id_bot_conversa_crm"
+            },
+            {
+              "name": "id_campo_instagram_crm"
+            },
+            {
+              "name": "id_campo_pergunta0_crm"
+            },
+            {
+              "name": "id_campo_pergunta1_crm"
+            },
+            {
+              "name": "id_campo_pergunta2_crm"
+            },
+            {
+              "name": "id_campo_pergunta3_crm"
+            },
+            {
+              "name": "id_campo_pergunta4_crm"
+            },
+            {
+              "name": "id_campo_pergunta5_crm"
+            },
+            {
+              "name": "id_campo_pergunta6_crm"
+            },
+            {
+              "name": "id_campo_pergunta7_crm"
+            },
+            {
+              "name": "id_campo_pergunta8_crm"
+            },
+            {
+              "name": "id_campo_pergunta9_crm"
+            },
+            {
+              "name": "id_campo_pergunta10_crm"
+            },
+            {
+              "name": "id_campo_pergunta11_crm"
+            },
+            {
+              "name": "id_campo_pergunta12_crm"
+            },
+            {
+              "name": "id_campo_pergunta13_crm"
+            },
+            {
+              "name": "id_campo_pergunta14_crm"
+            },
+            {
+              "name": "id_campo_pergunta15_crm"
+            },
+            {
+              "name": "id_campo_pergunta16_crm"
+            },
+            {
+              "name": "id_campo_pergunta17_crm"
+            },
+            {
+              "name": "id_campo_pergunta18_crm"
+            },
+            {
+              "name": "id_campo_pergunta19_crm"
+            },
+            {
+              "name": "id_campo_pergunta20_crm"
+            },
+            {
+              "name": "id_campo_utm_source_crm"
+            },
+            {
+              "name": "id_campo_utm_campaign_crm"
+            },
+            {
+              "name": "id_campo_utm_content_crm"
+            },
+            {
+              "name": "id_campo_utm_medium_crm"
+            },
+            {
+              "name": "id_campo_utm_term_crm"
+            },
+            {
+              "name": "id_campo_utm_fun_crm"
+            },
+            {
+              "name": "id_campo_utm_var_crm"
+            },
+            {
+              "name": "id_tag_desqualificado_crm"
+            },
+            {
+              "name": "id_tag_qualificado_crm"
+            },
+            {
+              "name": "id_tag_medio_qualificado_crm"
+            },
+            {
+              "name": "id_tag_aplicou_crm"
+            },
+            {
+              "name": "id_campo_ddd_crm"
+            },
+            {
+              "name": "id_campo_id_banco_deal_crm"
+            },
+            {
+              "name": "id_campo_id_bot_conversa_deal_crm"
+            },
+            {
+              "name": "id_campo_pergunta0_deal_crm"
+            },
+            {
+              "name": "id_campo_pergunta1_deal_crm"
+            },
+            {
+              "name": "id_campo_pergunta2_deal_crm"
+            },
+            {
+              "name": "id_campo_pergunta3_deal_crm"
+            },
+            {
+              "name": "id_campo_pergunta4_deal_crm"
+            },
+            {
+              "name": "id_campo_pergunta5_deal_crm"
+            },
+            {
+              "name": "id_campo_pergunta6_deal_crm"
+            },
+            {
+              "name": "id_campo_pergunta7_deal_crm"
+            },
+            {
+              "name": "id_campo_pergunta8_deal_crm"
+            },
+            {
+              "name": "id_campo_pergunta9_deal_crm"
+            },
+            {
+              "name": "id_campo_utm_source_deal_crm"
+            },
+            {
+              "name": "id_campo_utm_campaign_deal_crm"
+            },
+            {
+              "name": "id_campo_utm_content_deal_crm"
+            },
+            {
+              "name": "id_campo_utm_medium_deal_crm"
+            },
+            {
+              "name": "id_campo_utm_term_deal_crm"
+            },
+            {
+              "name": "id_campo_utm_var_deal_crm"
+            },
+            {
+              "name": "id_campo_utm_fun_deal_crm",
+              "value": "46"
+            },
+            {
+              "name": "id_campo_qualificacao_crm"
+            },
+            {
+              "name": "dia_da_semana_se",
+              "value": "={{   [     \"Domingo\",      \"Segunda-feira\",      \"Terça-feira\",      \"Quarta-feira\",      \"Quinta-feira\",      \"Sexta-feira\",      \"Sábado\"   ][new Date().getDay()] }}"
+            },
+            {
+              "name": "id_campo_dia_aplicou_se"
+            },
+            {
+              "name": "id_stage_desqualificado_crm"
+            },
+            {
+              "name": "id_pipeline_desqualificado_crm"
+            },
+            {
+              "name": "id_campo_pergunta10_deal_crm"
+            },
+            {
+              "name": "id_campo_instagram_deal_crm"
+            },
+            {
+              "name": "id_campo_qualificacao_deal_crm"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2e13e144-e2e9-418c-9705-c2c600547958",
+      "name": "dados_validados",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        960,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "4e665246-81dc-4829-993f-52c086406c8d",
+      "name": "Dados com + de 1 resposta",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        340,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "formulario-de-pesquisa",
+        "options": {}
+      },
+      "id": "1d01c97f-620e-4f84-b9e1-3bef7908c12a",
+      "name": "formulario_de_pesquisa",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        560,
+        280
+      ],
+      "webhookId": "227701d1-6702-47ea-824a-f7fb20f3500b"
+    },
+    {
+      "parameters": {
+        "queue": "Não Agendamentos - Parte 2",
+        "options": {
+          "arguments": {
+            "argument": [
+              {
+                "key": "x-queue-type",
+                "value": "quorum"
+              }
+            ]
+          },
+          "durable": true
+        }
+      },
+      "id": "c583dd18-7416-4326-823e-0e3c30950d7c",
+      "name": "entra_na_fila1",
+      "type": "n8n-nodes-base.rabbitmq",
+      "typeVersion": 1,
+      "position": [
+        1180,
+        460
+      ],
+      "credentials": {
+        "rabbitmq": {
+          "id": "lHkljF71xS7ATT1K",
+          "name": "[RabbitMQ] - Diego Rosa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "Nome do Cliente",
+              "value": "={{ $node[\"formata_dados1\"].json[\"nome\"] }}"
+            },
+            {
+              "name": "E-mail do Cliente",
+              "value": "={{ $node[\"formata_dados1\"].json[\"email\"] }}"
+            },
+            {
+              "name": "Telefone do Cliente - Formato BC",
+              "value": "=+{{ $node[\"formata_dados1\"].json[\"telefone\"] }}"
+            },
+            {
+              "name": "Telefone do Cliente - Formato Z-API",
+              "value": "={{ $node[\"formata_dados1\"].json[\"telefone\"] }}"
+            },
+            {
+              "name": "Instagram",
+              "value": "={{ $node[\"formata_dados1\"].json[\"instagram\"] }}"
+            },
+            {
+              "name": "pergunta0",
+              "value": "={{ $node[\"formata_dados1\"].json[\"pergunta0\"] }}"
+            },
+            {
+              "name": "pergunta1",
+              "value": "={{ $node[\"formata_dados1\"].json[\"pergunta1\"] }}"
+            },
+            {
+              "name": "pergunta2",
+              "value": "={{ $node[\"formata_dados1\"].json[\"pergunta2\"] }}"
+            },
+            {
+              "name": "pergunta3",
+              "value": "={{ $node[\"formata_dados1\"].json[\"pergunta3\"] }}"
+            },
+            {
+              "name": "pergunta4",
+              "value": "={{ $node[\"formata_dados1\"].json[\"pergunta4\"] }}"
+            },
+            {
+              "name": "pergunta5",
+              "value": "={{ $node[\"formata_dados1\"].json[\"pergunta5\"] }}"
+            },
+            {
+              "name": "pergunta6",
+              "value": "={{ $node[\"formata_dados1\"].json[\"pergunta6\"] }}"
+            },
+            {
+              "name": "pergunta7",
+              "value": "={{ $node[\"formata_dados1\"].json[\"pergunta7\"] }}"
+            },
+            {
+              "name": "pergunta8",
+              "value": "={{ $node[\"formata_dados1\"].json[\"pergunta8\"] }}"
+            },
+            {
+              "name": "pergunta9",
+              "value": "={{ $node[\"formata_dados1\"].json[\"pergunta9\"] }}"
+            },
+            {
+              "name": "pergunta10",
+              "value": "={{ $node[\"formata_dados1\"].json[\"pergunta10\"] }}"
+            },
+            {
+              "name": "pergunta11",
+              "value": "={{ $node[\"formata_dados1\"].json[\"pergunta11\"] }}"
+            },
+            {
+              "name": "pergunta12",
+              "value": "={{ $node[\"formata_dados1\"].json[\"pergunta12\"] }}"
+            },
+            {
+              "name": "pergunta13",
+              "value": "={{ $node[\"formata_dados1\"].json[\"pergunta13\"] }}"
+            },
+            {
+              "name": "pergunta14",
+              "value": "={{ $node[\"formata_dados1\"].json[\"pergunta14\"] }}"
+            },
+            {
+              "name": "pergunta15",
+              "value": "={{ $node[\"formata_dados1\"].json[\"pergunta15\"] }}"
+            },
+            {
+              "name": "pergunta16",
+              "value": "={{ $node[\"formata_dados1\"].json[\"pergunta16\"] }}"
+            },
+            {
+              "name": "pergunta17",
+              "value": "={{ $node[\"formata_dados1\"].json[\"pergunta17\"] }}"
+            },
+            {
+              "name": "pergunta18",
+              "value": "={{ $node[\"formata_dados1\"].json[\"pergunta18\"] }}"
+            },
+            {
+              "name": "pergunta19",
+              "value": "={{ $node[\"formata_dados1\"].json[\"pergunta19\"] }}"
+            },
+            {
+              "name": "pergunta20",
+              "value": "={{ $node[\"formata_dados1\"].json[\"pergunta20\"] }}"
+            },
+            {
+              "name": "utm_content",
+              "value": "={{ $node[\"formata_dados1\"].json[\"utm_content\"] }}"
+            },
+            {
+              "name": "utm_source",
+              "value": "={{ $node[\"formata_dados1\"].json[\"utm_source\"] }}"
+            },
+            {
+              "name": "utm_campaign",
+              "value": "={{ $node[\"formata_dados1\"].json[\"utm_campaign\"] }}"
+            },
+            {
+              "name": "utm_medium",
+              "value": "={{ $node[\"formata_dados1\"].json[\"utm_medium\"] }}"
+            },
+            {
+              "name": "utm_term",
+              "value": "={{ $node[\"formata_dados1\"].json[\"utm_term\"] }}"
+            },
+            {
+              "name": "data_resposta_type",
+              "value": "={{$now.toFormat('dd/MM/yyyy HH:mm')}}"
+            },
+            {
+              "name": "data_ultima_quinzena",
+              "value": "={{ $node[\"formata_dados1\"].json[\"data_ultima_quinzena\"] }}"
+            },
+            {
+              "name": "id_fluxo_nao_agendou_10_min"
+            },
+            {
+              "name": "id_fluxo_nao_agendou_10_min_desqualificados"
+            },
+            {
+              "name": "API-KEY"
+            },
+            {
+              "name": "id_campo_id_banco_de_dados_bot_conversa"
+            },
+            {
+              "name": "id_campo_utm_source_bot_conversa"
+            },
+            {
+              "name": "id_campo_utm_campaign_bot_conversa"
+            },
+            {
+              "name": "id_campo_utm_term_bot_conversa"
+            },
+            {
+              "name": "id_campo_utm_medium_bot_conversa"
+            },
+            {
+              "name": "id_campo_utm_content_bot_conversa"
+            },
+            {
+              "name": "id_campo_utm_fun_bot_conversa"
+            },
+            {
+              "name": "id_campo_utm_var_bot_conversa"
+            },
+            {
+              "name": "id_campo_instagram_bot_conversa"
+            },
+            {
+              "name": "id_campo_emailse_bot_conversa"
+            },
+            {
+              "name": "id_tag_medio_qualificado_bot_conversa"
+            },
+            {
+              "name": "id_tag_desqualificado_bot_conversa"
+            },
+            {
+              "name": "id_tag_qualificado_bot_conversa"
+            },
+            {
+              "name": "id_campo_idleadac_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta0_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta1_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta2_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta3_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta4_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta5_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta6_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta7_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta8_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta9_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta10_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta11_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta12_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta13_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta14_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta15_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta16_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta17_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta18_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta19_bot_conversa"
+            },
+            {
+              "name": "id_campo_pergunta20_bot_conversa"
+            },
+            {
+              "name": "id_campo_data_da_aplicacao_bot_conversa"
+            },
+            {
+              "name": "id_ending_typeform",
+              "value": "={{ $node[\"formata_dados1\"].json[\"ending\"] }}"
+            },
+            {
+              "name": "funil",
+              "value": "sessao_estrategica"
+            },
+            {
+              "name": "variacao_do_funil",
+              "value": "v1"
+            },
+            {
+              "name": "id_campo_pergunta0_crm",
+              "value": "f97e43d6de1fe58d8946274f4cc6c5b926abac50"
+            },
+            {
+              "name": "id_campo_pergunta1_crm",
+              "value": "c885d2bf592a584cc89ee194878a1fb5382936a2"
+            },
+            {
+              "name": "id_campo_pergunta2_crm",
+              "value": "f3f2ec8437e9807e2cbcea4a87fff7beac840a47"
+            },
+            {
+              "name": "id_campo_pergunta3_crm",
+              "value": "c82363cbc1b9ac31b062f814fa7018a3e21b9552"
+            },
+            {
+              "name": "id_campo_pergunta4_crm",
+              "value": "3909f9e17ec747c5d7a6e7a82fe83ad3a366ff84"
+            },
+            {
+              "name": "id_campo_pergunta5_crm",
+              "value": "69070838c3c59827fd797c64cf35ae5232c8cc16"
+            },
+            {
+              "name": "id_campo_pergunta6_crm",
+              "value": "f621e048f654726315c970b98a60e83e1b5ffe24"
+            },
+            {
+              "name": "id_campo_pergunta7_crm",
+              "value": "cf410e4586d4c91938048bfbdca3beffd675e412"
+            },
+            {
+              "name": "id_campo_email_crm",
+              "value": "91830053b3e945648ba9c1de6eb0c299252c683d"
+            },
+            {
+              "name": "id_campo_instagram_crm",
+              "value": "a2bb5329df03b276501ee4f206fcb1654b1d6d6c"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "11fd338a-d455-40c0-aaec-1698db49a36e",
+      "name": "dados_validados1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        960,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "formulario-sessao-estrategica",
+        "options": {}
+      },
+      "id": "d1532626-af00-450e-8ced-8d76d0aa9007",
+      "name": "formulario_sessao_estrategica",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        560,
+        460
+      ],
+      "webhookId": "227701d1-6702-47ea-824a-f7fb20f3500b"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Código padrão para typeform via ref\n\n// Extrair informações do input\nconst inputData = items[0].json;\nconst respostas = inputData.body.form_response.answers;\n\n// Função para extrair o DDD e formatar o telefone\nfunction extrairDddETelefone(telefone) {\n  if (!telefone) return \"\";\n\n  const telefoneLimpo = telefone.replace(/\\D/g, \"\");\n  const ddd = telefoneLimpo.slice(2, 4);\n  const ddi = telefoneLimpo.slice(0, 2);\n\n  let telefoneFormatado;\n  if (parseInt(ddd) > 28) {\n    telefoneFormatado = ddi + ddd + telefoneLimpo.slice(-8);\n  } else {\n    telefoneFormatado = ddi + ddd + telefoneLimpo.slice(-9);\n  }\n\n  return telefoneFormatado;\n}\n\n// Função para formatar a primeira letra de cada palavra em maiúsculo\nfunction formatarPrimeiraLetraMaiuscula(str) {\n  const palavras = str.toLowerCase().split(\" \");\n\n  for (let i = 0; i < palavras.length; i++) {\n    palavras[i] = palavras[i].charAt(0).toUpperCase() + palavras[i].slice(1);\n  }\n\n  return palavras.join(\" \");\n}\n\n// Função para extrair as UTMs do objeto JSON\nfunction extractUTMs(json) {\n  const utmParams = {};\n\n  function searchUTMs(obj) {\n    for (const key in obj) {\n      if (key.startsWith('utm_')) {\n        utmParams[key] = obj[key];\n      } else if (typeof obj[key] === 'object') {\n        searchUTMs(obj[key]);\n      }\n    }\n  }\n\n  searchUTMs(json);\n\n  return utmParams;\n}\n\n// Função para traduzir booleanos para Português\nfunction traduzirBooleano(valor) {\n  return valor ? \"Sim\" : \"Não\";\n}\n\n// Função para converter número em reais\nfunction formatarValorEmReal(valor) {\n  if (valor === null || valor === undefined) return \"\";\n  return `R$ ${valor.toFixed(2)}`;\n}\n\n// Extrair as UTMs do objeto JSON de entrada\nconst utms = extractUTMs(inputData);\n\n// Atribuir os valores das UTMs às variáveis correspondentes\nconst utmContent = utms.utm_content || '';\nconst utmSource = utms.utm_source || '';\nconst utmCampaign = utms.utm_campaign || '';\nconst utmMedium = utms.utm_medium || '';\nconst utmTerm = utms.utm_term || '';\n\n\n// Extrair o telefone e formatá-lo\n const telefoneAnswer = respostas.find(answer => answer.field.ref === \"9b3568c9-c0b8-47a1-aa72-28727424f203\");\n const telefoneFormatado = telefoneAnswer ? extrairDddETelefone(telefoneAnswer.phone_number) : \"\";\n\n// Extrair enging do formulário\n const Ending = $node[\"formulario_sessao_estrategica\"].json.body.form_response.ending.ref || '';\n\n// Obter a data atual\nconst dataAtual = new Date();\n\n// Subtrair 15 dias\ndataAtual.setDate(dataAtual.getDate() - 15);\n\n// Formatar a data para YYYY-MM-DD\nconst ano = dataAtual.getFullYear();\nconst mes = String(dataAtual.getMonth() + 1).padStart(2, '0'); // +1 porque os meses começam em 0\nconst dia = String(dataAtual.getDate()).padStart(2, '0');\n\nconst dataFormatada = `${ano}-${mes}-${dia}`;\n\nconsole.log(dataFormatada); // Saída no formato YYYY-MM-DD\n\n\n// Montar o objeto de output\nconst output = {\n  nome: formatarPrimeiraLetraMaiuscula(respostas.find(answer => answer.field.ref === \"4bf95c6e-6c0d-4604-a5c2-5e7a2f263733\")?.text) || \"\",\n  telefone: telefoneFormatado,\n  email: respostas.find(answer => answer.field.ref === \"bfa6359b-6cb0-49b2-96fa-24002313b75d\")?.email || \"\",\n  instagram: respostas.find(answer => answer.field.ref === \"daaef6cd-006d-4ff2-a197-adb74c48ece6\")?.text.replace('@','').toLowerCase() || \"\",\n\n// Montar estrutura de respostas do typeform\n  \n  //'nome_aqui': traduzirBooleano(respostas.find(answer => answer.field.ref === \"10c1787c-9644-4ffb-a5c1-d2e99770739b\")?.boolean) || '',\n  \n  'pergunta0': respostas.find(answer => answer.field.ref === \"603785be-6397-4fbe-91aa-eddd5eb95dad\")?.choice.label || \"\",\n  \n  'pergunta1': respostas.find(answer => answer.field.ref === \"145459b5-8896-4f37-9666-8c6004b58c51\")?.choice.label || \"\",\n  \n  'pergunta2': respostas.find(answer => answer.field.ref === \"deebc15d-ff02-485f-9da9-b8485d7019a7\")?.choice.label || \"\",\n\n  'pergunta3': respostas.find(answer => answer.field.ref === \"834176d2-bc57-4d6e-8e3a-0063f540d133\")?.choice.label || \"\",\n\n  'pergunta4': respostas.find(answer => answer.field.ref === \"1ba59414-6151-477f-be3c-464a65509e02\")?.choice.label || \"\",\n  \n  'pergunta5': respostas.find(answer => answer.field.ref === \"986e7448-5992-4f5e-b970-fd6c3c495e23\")?.text || \"\",\n\n  'pergunta6': respostas.find(answer => answer.field.ref === \"ffd4478e-ed99-4c23-9f5f-0263ad077a0f\")?.text || \"\",\n\n  'pergunta7': respostas.find(answer => answer.field.ref === \"120c25b3-5d25-4a36-bfbe-8bc4a7688792\")?.text || \"\",\n\n  'pergunta8': respostas.find(answer => answer.field.ref === \"\")?.text || \"\",\n  'pergunta9': respostas.find(answer => answer.field.ref === \"\")?.text || \"\",\n  'pergunta10': respostas.find(answer => answer.field.ref === \"\")?.text || \"\",\n  \n  utm_content: utmContent || \"\",\n  utm_source: utmSource || \"\",\n  utm_campaign: utmCampaign || \"\",\n  utm_medium: utmMedium || \"\",\n  utm_term: utmTerm || \"\",\n  data_ultima_quinzena: dataFormatada,\n  ending: Ending || \"\"\n};\n\nreturn [output];"
+      },
+      "id": "b9b0bdc9-d841-41ca-8779-91373b180639",
+      "name": "formata_dados1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        740,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## GUIA\n\nLoja física ou fabricante = P0 603785be-6397-4fbe-91aa-eddd5eb95dad\nCapital para investir em produtos = P1 145459b5-8896-4f37-9666-8c6004b58c51\nFaturamento líquido mensal = P2 deebc15d-ff02-485f-9da9-b8485d7019a7\nPossui Conta no Mercado Livre = P3 834176d2-bc57-4d6e-8e3a-0063f540d133\nFaturamento ML últimos 30 dias = P4 1ba59414-6151-477f-be3c-464a65509e02\nNicho de atuação/Deseja trabalhar = P5 986e7448-5992-4f5e-b970-fd6c3c495e23\nCidade/Estado = P6 ffd4478e-ed99-4c23-9f5f-0263ad077a0f\nMaior dificuldade = p7 120c25b3-5d25-4a36-bfbe-8bc4a7688792",
+        "height": 229.90651073849025,
+        "width": 974.0183627541479
+      },
+      "id": "b82c65c8-c193-4eab-944b-e4735045ba7b",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        160,
+        -40
+      ]
+    }
+  ],
+  "pinData": {
+    "Dados com + de 1 resposta": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8nwebhookdiegorosa.automagicbots.com.br",
+            "user-agent": "Typeform Webhooks",
+            "content-length": "16374",
+            "accept-encoding": "gzip",
+            "content-type": "application/json",
+            "traceparent": "00-e95c3efe831a8c126d7b24d87e33be20-35ab838d5b12f844-01",
+            "x-forwarded-for": "34.230.177.131",
+            "x-forwarded-host": "n8nwebhookdiegorosa.automagicbots.com.br",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "73bda55f1b58",
+            "x-real-ip": "34.230.177.131"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "event_id": "01J0KHQDY5A8S1HA3XZQQT29DB",
+            "event_type": "form_response",
+            "form_response": {
+              "form_id": "lg9SC1GV",
+              "token": "bw0txawu9t7t9ibw0p4hphdf6wo79z63",
+              "landed_at": "2024-06-17T16:48:01Z",
+              "submitted_at": "2024-06-17T16:50:46Z",
+              "definition": {
+                "id": "lg9SC1GV",
+                "title": "Próxima Turma / Julho 24",
+                "fields": [
+                  {
+                    "id": "h2baL8rRgVYP",
+                    "ref": "6bad3e33-dbd3-4640-a174-d53c574dce41",
+                    "type": "email",
+                    "title": "Qual o seu e-mail?",
+                    "properties": {}
+                  },
+                  {
+                    "id": "DYo53Z75oop4",
+                    "ref": "01FJSAWQ3RNRMTG38RWVMBG5NJ",
+                    "type": "multiple_choice",
+                    "title": "Qual a sua faixa etária?",
+                    "properties": {},
+                    "choices": [
+                      {
+                        "id": "VKHTCRmkQTp2",
+                        "ref": "4b80f8b8-24b3-47e8-afb7-7fa92d02e72b",
+                        "label": "Menor de 18 anos"
+                      },
+                      {
+                        "id": "Hvub6Cv8zVKO",
+                        "ref": "9a34205e-dfb3-46d3-879a-731b479f84b4",
+                        "label": "Entre 18 e 25 anos"
+                      },
+                      {
+                        "id": "2mMt2TdmuoeK",
+                        "ref": "26d8a08c-cd42-43b7-85c7-0d0fd228c0de",
+                        "label": "Entre 26 e 30 anos"
+                      },
+                      {
+                        "id": "owtvYELFrx6Z",
+                        "ref": "57895ffd-87b1-4f95-b986-32dc2cd5fffe",
+                        "label": "Entre 31 e 40 anos"
+                      },
+                      {
+                        "id": "EAOvFxTXgCzB",
+                        "ref": "6027350f-cbf3-498e-bc86-67e8c35fe339",
+                        "label": "Mais de 40 anos"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "hhysXBlXNtmL",
+                    "ref": "dcbc2d7f-a75a-4986-b6f5-db02d6b96d6a",
+                    "type": "multiple_choice",
+                    "title": "Qual o seu gênero?",
+                    "properties": {},
+                    "choices": [
+                      {
+                        "id": "WQmA08eG73ti",
+                        "ref": "9530f803-29a6-499c-98c1-e0885aeb2acb",
+                        "label": "Feminino"
+                      },
+                      {
+                        "id": "VQI41kvjTYWc",
+                        "ref": "3e9b6858-cf39-40dd-9b20-0c94bf0a6e19",
+                        "label": "Masculino"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "le2AfVIbm9Fg",
+                    "ref": "b5c078b2-1d9f-444c-9f20-b9f88a05aef0",
+                    "type": "multiple_choice",
+                    "title": "Qual a sua localização?",
+                    "properties": {},
+                    "choices": [
+                      {
+                        "id": "BqdZTktdfmDK",
+                        "ref": "b7efc6ca-db70-4cda-b2aa-596668c599ab",
+                        "label": "Capital de São Paulo"
+                      },
+                      {
+                        "id": "TIy1hLcGldv4",
+                        "ref": "64dd0550-bd15-4823-bf88-530585aeacb5",
+                        "label": "Norte (AC, RO, AM, RR, PA, AP, TO)"
+                      },
+                      {
+                        "id": "UuxehptLAqxW",
+                        "ref": "12506ce4-d2ac-49b9-a1a7-7fd22e6fb35b",
+                        "label": "Centro-Oeste (MT, GO, DF, MS)"
+                      },
+                      {
+                        "id": "JU82BYb9JISa",
+                        "ref": "5a7ca8ef-d381-4011-9b37-f02ca9b9fcbc",
+                        "label": "Nordeste (MA, PI, BA, CE, PE, SE, AL, PB, RN)"
+                      },
+                      {
+                        "id": "fjitS2v5A28a",
+                        "ref": "33ba817e-caf6-4111-91ee-ed02551c8be0",
+                        "label": "Sudeste (SP, MG, ES, RJ)"
+                      },
+                      {
+                        "id": "kFYp1JgL7c0b",
+                        "ref": "21cc5d26-3c7c-4a62-9d07-594adf82f226",
+                        "label": "Sul (RS, PR, SC)"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "bo1yPUYUDv6H",
+                    "ref": "8af1e2e4-7da7-41e1-ab2d-07542500de87",
+                    "type": "multiple_choice",
+                    "title": "Você tem filho(s)?",
+                    "properties": {},
+                    "choices": [
+                      {
+                        "id": "7Bp9zJDep4YM",
+                        "ref": "bc9bb38a-15a3-4e28-90ba-42786dc851d4",
+                        "label": "Sim"
+                      },
+                      {
+                        "id": "fl6M1cC3IoDs",
+                        "ref": "d7a56f04-0fee-4b8b-9455-48c32fc9e7cc",
+                        "label": "Não"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "XMkgzRxGxaqs",
+                    "ref": "2c63b5f4-3edf-436d-9227-0ba9639bfe8e",
+                    "type": "multiple_choice",
+                    "title": "Qual o seu momento profissional?",
+                    "properties": {},
+                    "allow_multiple_selections": true,
+                    "choices": [
+                      {
+                        "id": "mAQ5tzLjkGsK",
+                        "ref": "c831d701-8316-4024-89db-b943da694eea",
+                        "label": "CLT"
+                      },
+                      {
+                        "id": "7VYwInK3itRH",
+                        "ref": "4093149a-c31f-413d-a9f3-d4e2ed706843",
+                        "label": "Funcionário público"
+                      },
+                      {
+                        "id": "3yZs83sRX87X",
+                        "ref": "56d0bd8b-245a-4621-a063-47fcb33db1b4",
+                        "label": "Empresário"
+                      },
+                      {
+                        "id": "UKozkHTgkClA",
+                        "ref": "c66a17f4-2b2f-4551-9a1d-3d46bd94803d",
+                        "label": "Autonomo"
+                      },
+                      {
+                        "id": "cTVsCkmqo0Ib",
+                        "ref": "1e2b1e6d-fa1c-43f8-8f95-ed5cd4836bbe",
+                        "label": "Estudante"
+                      },
+                      {
+                        "id": "mnU91fDESnYI",
+                        "ref": "ca8c2419-01fd-4d82-869d-e21fd00664bd",
+                        "label": "Desempregado"
+                      },
+                      {
+                        "id": "JETXkBRuC1JA",
+                        "ref": "02d6c884-1960-4efd-9009-4ea5bc0e0f38",
+                        "label": "Aposentado"
+                      },
+                      {
+                        "id": "dyAxJctyD9yv",
+                        "ref": "8656abd8-b4b3-40d7-be85-67e663a93146",
+                        "label": "Outros"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "LlL2fAiHUmpk",
+                    "ref": "6199f40e-82de-44d8-901a-e5e97ba05159",
+                    "type": "multiple_choice",
+                    "title": "Qual a sua renda mensal?",
+                    "properties": {},
+                    "choices": [
+                      {
+                        "id": "npMFR7FsRx3O",
+                        "ref": "c7b20fd8-ba6a-40ba-9306-7b475c795d60",
+                        "label": "Até R5.000"
+                      },
+                      {
+                        "id": "w40SL03LJI3q",
+                        "ref": "97dd564f-a405-44cf-a144-84ca4508043b",
+                        "label": "Entre R$ 5.001 e R$10.000"
+                      },
+                      {
+                        "id": "EFHXPdnC58Xf",
+                        "ref": "70c44ed0-ff5e-4021-b0a2-25a248fdf396",
+                        "label": "Entre R$ 10.001 e R$20.000"
+                      },
+                      {
+                        "id": "qpNVqFcacjlX",
+                        "ref": "1ca43aff-64cf-4741-bd32-4f45e0edce49",
+                        "label": "Entre R$ 20.001 e R$30.000"
+                      },
+                      {
+                        "id": "0tZ03Tfr2ZdX",
+                        "ref": "dd963728-e215-4678-9f2b-2402090a9daf",
+                        "label": "Entre R$ 30.001 e R$50.000"
+                      },
+                      {
+                        "id": "LVhwpdJRiO7j",
+                        "ref": "912e0542-06d1-48f5-82d7-7619854c610d",
+                        "label": "Acima de R$50.000"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "EqIB7vaKsIWm",
+                    "ref": "25b21709-dd00-45cd-9f46-057b6f1f0f8c",
+                    "type": "multiple_choice",
+                    "title": "Você já vende no Mercado Livre?",
+                    "properties": {},
+                    "choices": [
+                      {
+                        "id": "pslPYf8kiLSW",
+                        "ref": "772075f6-bf8f-418c-8f3a-a59a0139b68d",
+                        "label": "Sim"
+                      },
+                      {
+                        "id": "UqGJB2c2zLKY",
+                        "ref": "591871d5-e6af-4630-bc42-ac67e2f56376",
+                        "label": "Já vendi, porém parei"
+                      },
+                      {
+                        "id": "cnw3V5qxci4l",
+                        "ref": "7984dfa0-6b59-4f2f-8713-fe868540ec02",
+                        "label": "Não"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "LixIzqsRV8Ou",
+                    "ref": "c949da17-739f-4995-ad8b-3a570b3583d9",
+                    "type": "multiple_choice",
+                    "title": "Começou no Mercado Livre há quanto tempo?",
+                    "properties": {},
+                    "choices": [
+                      {
+                        "id": "xDhtKIR4ittB",
+                        "ref": "ebb32097-fe22-44ae-928b-e6f44b4b9da8",
+                        "label": "Menos de 3 meses"
+                      },
+                      {
+                        "id": "gXWUswOtDEEj",
+                        "ref": "cb92694f-6eb4-4906-abb5-dd5a6c1019fc",
+                        "label": "Menos de 1 ano"
+                      },
+                      {
+                        "id": "gj6eoRbXFwTX",
+                        "ref": "17a8b7d7-42e8-45d0-ad41-8d45e2555096",
+                        "label": "Entre 1 e 2 anos"
+                      },
+                      {
+                        "id": "XYWEg5LcSuNm",
+                        "ref": "fa715d90-cfed-4f54-9cb4-b3ce938ee47e",
+                        "label": "Entre 2 e 5 anos"
+                      },
+                      {
+                        "id": "FkvWVdGBjqke",
+                        "ref": "1a65b79d-f08c-4d1b-9479-f08f0ba679b7",
+                        "label": "Mais de 5 anos"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "vKTLiCVGO778",
+                    "ref": "ddf72753-9945-421e-b9a7-07a3fd5427a6",
+                    "type": "multiple_choice",
+                    "title": "Qual o seu nível atual no Mercado Livre?",
+                    "properties": {},
+                    "choices": [
+                      {
+                        "id": "VUBhAdKvLF1Q",
+                        "ref": "c41fda94-4798-4cac-93a1-78dfcb7cc00b",
+                        "label": "Iniciante (Sem medalha)"
+                      },
+                      {
+                        "id": "AfRS8qF3N5nI",
+                        "ref": "64e9ebd1-7b16-4040-ad9b-2d6443c7751f",
+                        "label": "Intermediário (Próximo a conseguir medalha)"
+                      },
+                      {
+                        "id": "qI9ilfiwE1XD",
+                        "ref": "961b0566-e136-472d-81b8-894b689cbabc",
+                        "label": "Avançado (Mercado Líder à Mercado Líder Gold)"
+                      },
+                      {
+                        "id": "bmGhwtUTpEJ1",
+                        "ref": "5aa0ba49-65b3-4142-8325-78173bb35902",
+                        "label": "Platinum (Mercado Líder Platinum)"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "fpoLZzao941i",
+                    "ref": "3c797956-28da-46d0-8692-c317596cdb3f",
+                    "type": "multiple_choice",
+                    "title": "Qual sua maior dificuldade no Mercado Livre?",
+                    "properties": {},
+                    "allow_multiple_selections": true,
+                    "choices": [
+                      {
+                        "id": "RxRGxUOUAvdR",
+                        "ref": "bff8648a-631d-4286-b39c-0e8a9261428f",
+                        "label": "Escalar o faturamento e as vendas"
+                      },
+                      {
+                        "id": "etriFag2gdfX",
+                        "ref": "9c33df09-75e7-4c82-bac8-66d805b16db6",
+                        "label": "Encontrar novos produtos"
+                      },
+                      {
+                        "id": "HyySS98Lq9D8",
+                        "ref": "b8653c1b-c01b-4357-92af-4f1a15227fca",
+                        "label": "Encontrar novos fornecedores"
+                      },
+                      {
+                        "id": "PfYakC8gzsOJ",
+                        "ref": "0de36250-0713-451d-998e-f53098bc9f9a",
+                        "label": "Mercado Livre ADS"
+                      },
+                      {
+                        "id": "YHWRJh2hwkLC",
+                        "ref": "587079ab-e8a5-4b92-b606-e630ccbccbda",
+                        "label": "Fazer trabalhos de  contabilidade"
+                      },
+                      {
+                        "id": "pnAG6gOpbFby",
+                        "ref": "6f952378-faaf-4397-834d-cd1804f15d2b",
+                        "label": "Gerir o meu caixa"
+                      },
+                      {
+                        "id": "90W9bMvOSM7C",
+                        "ref": "1474e290-9093-460a-9570-7fe4b46cf7c4",
+                        "label": "Estruturar uma empresa para crescer"
+                      },
+                      {
+                        "id": "zwVnkDpnaJOs",
+                        "ref": "8a494609-1eeb-45c0-b104-e4212f25f54d",
+                        "label": "Criar uma marca forte"
+                      },
+                      {
+                        "id": "ePx0ftA4G7oh",
+                        "ref": "4274ef03-803e-4f1c-803e-d624cc75ea2f",
+                        "label": "Vender todos os dias"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "KZlmsHVWLG3W",
+                    "ref": "8330711e-ed8e-4218-874d-9f170ed2f11c",
+                    "type": "long_text",
+                    "title": "O que te motivou a querer começar a vender no Mercado Livre?",
+                    "properties": {}
+                  },
+                  {
+                    "id": "9dWmsQ1Ph1QC",
+                    "ref": "c0e48927-96b4-42fd-af5e-11e922e1688b",
+                    "type": "multiple_choice",
+                    "title": "O que te impede de começar?",
+                    "properties": {},
+                    "allow_multiple_selections": true,
+                    "choices": [
+                      {
+                        "id": "PRYVlMwKtA7s",
+                        "ref": "d460026d-a39f-4bec-8f92-492e9039853f",
+                        "label": "Medo de fracassar"
+                      },
+                      {
+                        "id": "h3pK5YWuK2F3",
+                        "ref": "28fad30d-6b5a-42f7-86e8-56fe3627a2fa",
+                        "label": "Medo de largar o emprego atual"
+                      },
+                      {
+                        "id": "PqdruFHJSOxK",
+                        "ref": "0409c608-2128-4946-9afd-3b30df5cb0b8",
+                        "label": "Falta de dinheiro"
+                      },
+                      {
+                        "id": "V9C5DoMn7tZm",
+                        "ref": "df0fd45b-5ae5-4a61-b4e9-d165b46f1a5a",
+                        "label": "Falta de conhecimento"
+                      },
+                      {
+                        "id": "PQkUQFrbwXc7",
+                        "ref": "9b93e282-460f-4a3b-b871-eeda40c60b4c",
+                        "label": "Falta de tempo"
+                      },
+                      {
+                        "id": "xIOGGPIc7VdT",
+                        "ref": "eb081f5c-0b4b-433c-b6bf-accf2586ec8c",
+                        "label": "Não saber o que vender"
+                      },
+                      {
+                        "id": "zi6aeMx7wL4H",
+                        "ref": "78b6c4af-7285-4239-939c-5138ef9455b2",
+                        "label": "Não saber onde encontrar produtos"
+                      },
+                      {
+                        "id": "sUJtmXSzLtbj",
+                        "ref": "7c0926fd-6d74-4ffe-b48d-375722408bf2",
+                        "label": "Não saber por onde começar"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "YjhGZ9RCsg94",
+                    "ref": "228008a1-41ac-42e4-af6d-f62634f11074",
+                    "type": "short_text",
+                    "title": "Você acha que começar a vender no Mercado Livre pode te ajudar de que forma?",
+                    "properties": {}
+                  },
+                  {
+                    "id": "rBtOgyd2UeaR",
+                    "ref": "ce4bb126-c3ce-4499-8f11-78bb05c7616d",
+                    "type": "multiple_choice",
+                    "title": "Quais são suas maiores dúvidas sobre vender online?",
+                    "properties": {},
+                    "allow_multiple_selections": true,
+                    "choices": [
+                      {
+                        "id": "42ssn5X0Yszi",
+                        "ref": "3e61efe5-875b-4c66-8354-108b4144d0ca",
+                        "label": "É preciso de muito dinheiro para começar?"
+                      },
+                      {
+                        "id": "TBMIwQZeNf1z",
+                        "ref": "d90f2f78-6faa-42c8-a78e-fc2906660efb",
+                        "label": "É possível trabalhar com e-commerce mesmo sendo CLT?"
+                      },
+                      {
+                        "id": "TPlmlwe2LDuR",
+                        "ref": "6973eca5-d9aa-4567-b6d3-cc08638c1eee",
+                        "label": "É possível viver de e-commerce morando longe de centros comerciais?"
+                      },
+                      {
+                        "id": "ICsQh5f8aWEv",
+                        "ref": "23d7e362-c10b-41cc-a44c-8eb74f1acf54",
+                        "label": "Qual produto ou fornecedor preciso achar para começar vender?"
+                      },
+                      {
+                        "id": "qKz8qWNOhK8o",
+                        "ref": "7450b7ff-c2f7-41e1-9e0b-258bb5dd270b",
+                        "label": "É necessário ser pessoa jurídica para vender?"
+                      },
+                      {
+                        "id": "J34XAmEGCcs0",
+                        "ref": "51b6d8b2-6f0b-4d6e-a08b-5060e418a7d9",
+                        "label": "Outras"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "RWfSRIUVjv0h",
+                    "ref": "61916979-5d1a-40a7-bfae-bd30f0ed3f8c",
+                    "type": "short_text",
+                    "title": "Por qual motivo você parou de vender?",
+                    "properties": {}
+                  },
+                  {
+                    "id": "qIptdyjdgkDL",
+                    "ref": "2802e880-1e27-4b87-b2a2-d8a11cfaae44",
+                    "type": "multiple_choice",
+                    "title": "Qual sua maior dificuldade enquanto vendia no Mercado Livre?",
+                    "properties": {},
+                    "allow_multiple_selections": true,
+                    "choices": [
+                      {
+                        "id": "6PKvEYT0t9r9",
+                        "ref": "41e904e5-1f76-4917-9d77-afa87c73485a",
+                        "label": "Escalar o faturamento e as vendas"
+                      },
+                      {
+                        "id": "HUS8UofB5n4q",
+                        "ref": "9a1446a2-3cf0-4076-aabd-6eebbc8a13a0",
+                        "label": "Encontrar novos produtos"
+                      },
+                      {
+                        "id": "TWfMBnCjnjBF",
+                        "ref": "3e5e4c60-5832-45e2-9a53-9a5cf7e80195",
+                        "label": "Encontrar novos fornecedores"
+                      },
+                      {
+                        "id": "uQLGzpZDzHWU",
+                        "ref": "2b451bbe-5942-45f6-9978-39351e743d0e",
+                        "label": "Mercado Livre ADS"
+                      },
+                      {
+                        "id": "8aWzTmhiMgHY",
+                        "ref": "c579b1a9-9f1f-41ca-bbc2-2e25ed9a5227",
+                        "label": "Fazer trabalhos de  contabilidade"
+                      },
+                      {
+                        "id": "NDZ6UrPrnDH9",
+                        "ref": "2b2e95d5-2303-4766-ac09-8b8d2875017a",
+                        "label": "Gerir o meu caixa"
+                      },
+                      {
+                        "id": "EzGG1q3YswTs",
+                        "ref": "59aa38ba-b7b6-45ba-94f0-d5b92d47ca1e",
+                        "label": "Estruturar uma empresa para crescer"
+                      },
+                      {
+                        "id": "rhcpmMbhzkBK",
+                        "ref": "7960a4e3-88cb-4b4a-a17d-c0297757d237",
+                        "label": "Criar uma marca forte"
+                      },
+                      {
+                        "id": "qXhLUeKUYHd0",
+                        "ref": "b6f7115d-307f-458e-9ba4-5449268e6994",
+                        "label": "Vender todos os dias"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "HhPkoG99GTKB",
+                    "ref": "739b35c1-ec20-419b-a866-763217399a39",
+                    "type": "multiple_choice",
+                    "title": "Qual o seu maior sonho quando o assunto é dinheiro?",
+                    "properties": {},
+                    "choices": [
+                      {
+                        "id": "mKOe5Pk0fTVZ",
+                        "ref": "553139a0-e06a-4732-9982-1d7a9dacc8b6",
+                        "label": "Comprar o que eu quiser sem ter que olhar o saldo no banco"
+                      },
+                      {
+                        "id": "UkFqnW2uCatf",
+                        "ref": "0c3dbb36-1643-4715-bf79-1600f890e563",
+                        "label": "Proporcionar uma melhor qualidade de vida para a minha família"
+                      },
+                      {
+                        "id": "kyvPqh3yY9x6",
+                        "ref": "af2abd56-cb90-4b3f-b4e6-5b9966f05443",
+                        "label": "Ter uma empresa e ser um empresário de sucesso"
+                      },
+                      {
+                        "id": "XBAN91H771F8",
+                        "ref": "fb46be81-80fc-42fe-a67c-5e11e823f341",
+                        "label": "Ter uma casa e um carro próprios"
+                      }
+                    ]
+                  }
+                ],
+                "endings": [
+                  {
+                    "id": "j4R9oHxd3FMa",
+                    "ref": "01FJSAWQ3RW9KTTG9ZQBK83CNN",
+                    "title": "Muito obrigado pelas respostas!",
+                    "type": "thankyou_screen",
+                    "properties": {
+                      "description": "Vamos analisar cada vírgula para poder entregar o melhor conteúdo nos próximos dias.",
+                      "button_text": "Finalizar",
+                      "show_button": true,
+                      "share_icons": false,
+                      "button_mode": "default_redirect"
+                    }
+                  }
+                ]
+              },
+              "answers": [
+                {
+                  "type": "email",
+                  "email": "vitorrqueiroztrafego@gmail.com",
+                  "field": {
+                    "id": "h2baL8rRgVYP",
+                    "type": "email",
+                    "ref": "6bad3e33-dbd3-4640-a174-d53c574dce41"
+                  }
+                },
+                {
+                  "type": "choice",
+                  "choice": {
+                    "id": "Hvub6Cv8zVKO",
+                    "label": "Entre 18 e 25 anos",
+                    "ref": "9a34205e-dfb3-46d3-879a-731b479f84b4"
+                  },
+                  "field": {
+                    "id": "DYo53Z75oop4",
+                    "type": "multiple_choice",
+                    "ref": "01FJSAWQ3RNRMTG38RWVMBG5NJ"
+                  }
+                },
+                {
+                  "type": "choice",
+                  "choice": {
+                    "id": "VQI41kvjTYWc",
+                    "label": "Masculino",
+                    "ref": "3e9b6858-cf39-40dd-9b20-0c94bf0a6e19"
+                  },
+                  "field": {
+                    "id": "hhysXBlXNtmL",
+                    "type": "multiple_choice",
+                    "ref": "dcbc2d7f-a75a-4986-b6f5-db02d6b96d6a"
+                  }
+                },
+                {
+                  "type": "choice",
+                  "choice": {
+                    "id": "fjitS2v5A28a",
+                    "label": "Sudeste (SP, MG, ES, RJ)",
+                    "ref": "33ba817e-caf6-4111-91ee-ed02551c8be0"
+                  },
+                  "field": {
+                    "id": "le2AfVIbm9Fg",
+                    "type": "multiple_choice",
+                    "ref": "b5c078b2-1d9f-444c-9f20-b9f88a05aef0"
+                  }
+                },
+                {
+                  "type": "choice",
+                  "choice": {
+                    "id": "fl6M1cC3IoDs",
+                    "label": "Não",
+                    "ref": "d7a56f04-0fee-4b8b-9455-48c32fc9e7cc"
+                  },
+                  "field": {
+                    "id": "bo1yPUYUDv6H",
+                    "type": "multiple_choice",
+                    "ref": "8af1e2e4-7da7-41e1-ab2d-07542500de87"
+                  }
+                },
+                {
+                  "type": "choices",
+                  "choices": {
+                    "ids": [
+                      "3yZs83sRX87X",
+                      "UKozkHTgkClA"
+                    ],
+                    "labels": [
+                      "Empresário",
+                      "Autonomo"
+                    ],
+                    "refs": [
+                      "56d0bd8b-245a-4621-a063-47fcb33db1b4",
+                      "c66a17f4-2b2f-4551-9a1d-3d46bd94803d"
+                    ]
+                  },
+                  "field": {
+                    "id": "XMkgzRxGxaqs",
+                    "type": "multiple_choice",
+                    "ref": "2c63b5f4-3edf-436d-9227-0ba9639bfe8e"
+                  }
+                },
+                {
+                  "type": "choice",
+                  "choice": {
+                    "id": "npMFR7FsRx3O",
+                    "label": "Até R5.000",
+                    "ref": "c7b20fd8-ba6a-40ba-9306-7b475c795d60"
+                  },
+                  "field": {
+                    "id": "LlL2fAiHUmpk",
+                    "type": "multiple_choice",
+                    "ref": "6199f40e-82de-44d8-901a-e5e97ba05159"
+                  }
+                },
+                {
+                  "type": "choice",
+                  "choice": {
+                    "id": "UqGJB2c2zLKY",
+                    "label": "Já vendi, porém parei",
+                    "ref": "591871d5-e6af-4630-bc42-ac67e2f56376"
+                  },
+                  "field": {
+                    "id": "EqIB7vaKsIWm",
+                    "type": "multiple_choice",
+                    "ref": "25b21709-dd00-45cd-9f46-057b6f1f0f8c"
+                  }
+                },
+                {
+                  "type": "choice",
+                  "choice": {
+                    "id": "gXWUswOtDEEj",
+                    "label": "Menos de 1 ano",
+                    "ref": "cb92694f-6eb4-4906-abb5-dd5a6c1019fc"
+                  },
+                  "field": {
+                    "id": "LixIzqsRV8Ou",
+                    "type": "multiple_choice",
+                    "ref": "c949da17-739f-4995-ad8b-3a570b3583d9"
+                  }
+                },
+                {
+                  "type": "choice",
+                  "choice": {
+                    "id": "VUBhAdKvLF1Q",
+                    "label": "Iniciante (Sem medalha)",
+                    "ref": "c41fda94-4798-4cac-93a1-78dfcb7cc00b"
+                  },
+                  "field": {
+                    "id": "vKTLiCVGO778",
+                    "type": "multiple_choice",
+                    "ref": "ddf72753-9945-421e-b9a7-07a3fd5427a6"
+                  }
+                },
+                {
+                  "type": "choices",
+                  "choices": {
+                    "ids": [
+                      "RxRGxUOUAvdR",
+                      "PfYakC8gzsOJ",
+                      "pnAG6gOpbFby"
+                    ],
+                    "labels": [
+                      "Escalar o faturamento e as vendas",
+                      "Mercado Livre ADS",
+                      "Gerir o meu caixa"
+                    ],
+                    "refs": [
+                      "bff8648a-631d-4286-b39c-0e8a9261428f",
+                      "0de36250-0713-451d-998e-f53098bc9f9a",
+                      "6f952378-faaf-4397-834d-cd1804f15d2b"
+                    ]
+                  },
+                  "field": {
+                    "id": "fpoLZzao941i",
+                    "type": "multiple_choice",
+                    "ref": "3c797956-28da-46d0-8692-c317596cdb3f"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": "Meu motivo é liberdade - teste",
+                  "field": {
+                    "id": "KZlmsHVWLG3W",
+                    "type": "long_text",
+                    "ref": "8330711e-ed8e-4218-874d-9f170ed2f11c"
+                  }
+                },
+                {
+                  "type": "choices",
+                  "choices": {
+                    "ids": [
+                      "h3pK5YWuK2F3",
+                      "PqdruFHJSOxK",
+                      "V9C5DoMn7tZm"
+                    ],
+                    "labels": [
+                      "Medo de largar o emprego atual",
+                      "Falta de dinheiro",
+                      "Falta de conhecimento"
+                    ],
+                    "refs": [
+                      "28fad30d-6b5a-42f7-86e8-56fe3627a2fa",
+                      "0409c608-2128-4946-9afd-3b30df5cb0b8",
+                      "df0fd45b-5ae5-4a61-b4e9-d165b46f1a5a"
+                    ]
+                  },
+                  "field": {
+                    "id": "9dWmsQ1Ph1QC",
+                    "type": "multiple_choice",
+                    "ref": "c0e48927-96b4-42fd-af5e-11e922e1688b"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": "Sim, iniciar as vendas pode me ajudar muito",
+                  "field": {
+                    "id": "YjhGZ9RCsg94",
+                    "type": "short_text",
+                    "ref": "228008a1-41ac-42e4-af6d-f62634f11074"
+                  }
+                },
+                {
+                  "type": "choices",
+                  "choices": {
+                    "ids": [
+                      "42ssn5X0Yszi",
+                      "TBMIwQZeNf1z",
+                      "TPlmlwe2LDuR"
+                    ],
+                    "labels": [
+                      "É preciso de muito dinheiro para começar?",
+                      "É possível trabalhar com e-commerce mesmo sendo CLT?",
+                      "É possível viver de e-commerce morando longe de centros comerciais?"
+                    ],
+                    "refs": [
+                      "3e61efe5-875b-4c66-8354-108b4144d0ca",
+                      "d90f2f78-6faa-42c8-a78e-fc2906660efb",
+                      "6973eca5-d9aa-4567-b6d3-cc08638c1eee"
+                    ]
+                  },
+                  "field": {
+                    "id": "rBtOgyd2UeaR",
+                    "type": "multiple_choice",
+                    "ref": "ce4bb126-c3ce-4499-8f11-78bb05c7616d"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": "Parei de vender por um motivo",
+                  "field": {
+                    "id": "RWfSRIUVjv0h",
+                    "type": "short_text",
+                    "ref": "61916979-5d1a-40a7-bfae-bd30f0ed3f8c"
+                  }
+                },
+                {
+                  "type": "choices",
+                  "choices": {
+                    "ids": [
+                      "6PKvEYT0t9r9",
+                      "HUS8UofB5n4q",
+                      "TWfMBnCjnjBF"
+                    ],
+                    "labels": [
+                      "Escalar o faturamento e as vendas",
+                      "Encontrar novos produtos",
+                      "Encontrar novos fornecedores"
+                    ],
+                    "refs": [
+                      "41e904e5-1f76-4917-9d77-afa87c73485a",
+                      "9a1446a2-3cf0-4076-aabd-6eebbc8a13a0",
+                      "3e5e4c60-5832-45e2-9a53-9a5cf7e80195"
+                    ]
+                  },
+                  "field": {
+                    "id": "qIptdyjdgkDL",
+                    "type": "multiple_choice",
+                    "ref": "2802e880-1e27-4b87-b2a2-d8a11cfaae44"
+                  }
+                },
+                {
+                  "type": "choice",
+                  "choice": {
+                    "id": "mKOe5Pk0fTVZ",
+                    "label": "Comprar o que eu quiser sem ter que olhar o saldo no banco",
+                    "ref": "553139a0-e06a-4732-9982-1d7a9dacc8b6"
+                  },
+                  "field": {
+                    "id": "HhPkoG99GTKB",
+                    "type": "multiple_choice",
+                    "ref": "739b35c1-ec20-419b-a866-763217399a39"
+                  }
+                }
+              ],
+              "ending": {
+                "id": "j4R9oHxd3FMa",
+                "ref": "01FJSAWQ3RW9KTTG9ZQBK83CNN"
+              }
+            }
+          },
+          "webhookUrl": "https://n8nwebhookdiegorosa.automagicbots.com.br/webhook/formulario-de-pesquisa",
+          "executionMode": "production"
+        }
+      }
+    ],
+    "formulario_de_pesquisa": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8nwebhookdiegorosa.automagicbots.com.br",
+            "user-agent": "Typeform Webhooks",
+            "content-length": "16374",
+            "accept-encoding": "gzip",
+            "content-type": "application/json",
+            "traceparent": "00-e95c3efe831a8c126d7b24d87e33be20-35ab838d5b12f844-01",
+            "x-forwarded-for": "34.230.177.131",
+            "x-forwarded-host": "n8nwebhookdiegorosa.automagicbots.com.br",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "73bda55f1b58",
+            "x-real-ip": "34.230.177.131"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "event_id": "01J0KHQDY5A8S1HA3XZQQT29DB",
+            "event_type": "form_response",
+            "form_response": {
+              "form_id": "lg9SC1GV",
+              "token": "bw0txawu9t7t9ibw0p4hphdf6wo79z63",
+              "landed_at": "2024-06-17T16:48:01Z",
+              "submitted_at": "2024-06-17T16:50:46Z",
+              "definition": {
+                "id": "lg9SC1GV",
+                "title": "Próxima Turma / Julho 24",
+                "fields": [
+                  {
+                    "id": "h2baL8rRgVYP",
+                    "ref": "6bad3e33-dbd3-4640-a174-d53c574dce41",
+                    "type": "email",
+                    "title": "Qual o seu e-mail?",
+                    "properties": {}
+                  },
+                  {
+                    "id": "DYo53Z75oop4",
+                    "ref": "01FJSAWQ3RNRMTG38RWVMBG5NJ",
+                    "type": "multiple_choice",
+                    "title": "Qual a sua faixa etária?",
+                    "properties": {},
+                    "choices": [
+                      {
+                        "id": "VKHTCRmkQTp2",
+                        "ref": "4b80f8b8-24b3-47e8-afb7-7fa92d02e72b",
+                        "label": "Menor de 18 anos"
+                      },
+                      {
+                        "id": "Hvub6Cv8zVKO",
+                        "ref": "9a34205e-dfb3-46d3-879a-731b479f84b4",
+                        "label": "Entre 18 e 25 anos"
+                      },
+                      {
+                        "id": "2mMt2TdmuoeK",
+                        "ref": "26d8a08c-cd42-43b7-85c7-0d0fd228c0de",
+                        "label": "Entre 26 e 30 anos"
+                      },
+                      {
+                        "id": "owtvYELFrx6Z",
+                        "ref": "57895ffd-87b1-4f95-b986-32dc2cd5fffe",
+                        "label": "Entre 31 e 40 anos"
+                      },
+                      {
+                        "id": "EAOvFxTXgCzB",
+                        "ref": "6027350f-cbf3-498e-bc86-67e8c35fe339",
+                        "label": "Mais de 40 anos"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "hhysXBlXNtmL",
+                    "ref": "dcbc2d7f-a75a-4986-b6f5-db02d6b96d6a",
+                    "type": "multiple_choice",
+                    "title": "Qual o seu gênero?",
+                    "properties": {},
+                    "choices": [
+                      {
+                        "id": "WQmA08eG73ti",
+                        "ref": "9530f803-29a6-499c-98c1-e0885aeb2acb",
+                        "label": "Feminino"
+                      },
+                      {
+                        "id": "VQI41kvjTYWc",
+                        "ref": "3e9b6858-cf39-40dd-9b20-0c94bf0a6e19",
+                        "label": "Masculino"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "le2AfVIbm9Fg",
+                    "ref": "b5c078b2-1d9f-444c-9f20-b9f88a05aef0",
+                    "type": "multiple_choice",
+                    "title": "Qual a sua localização?",
+                    "properties": {},
+                    "choices": [
+                      {
+                        "id": "BqdZTktdfmDK",
+                        "ref": "b7efc6ca-db70-4cda-b2aa-596668c599ab",
+                        "label": "Capital de São Paulo"
+                      },
+                      {
+                        "id": "TIy1hLcGldv4",
+                        "ref": "64dd0550-bd15-4823-bf88-530585aeacb5",
+                        "label": "Norte (AC, RO, AM, RR, PA, AP, TO)"
+                      },
+                      {
+                        "id": "UuxehptLAqxW",
+                        "ref": "12506ce4-d2ac-49b9-a1a7-7fd22e6fb35b",
+                        "label": "Centro-Oeste (MT, GO, DF, MS)"
+                      },
+                      {
+                        "id": "JU82BYb9JISa",
+                        "ref": "5a7ca8ef-d381-4011-9b37-f02ca9b9fcbc",
+                        "label": "Nordeste (MA, PI, BA, CE, PE, SE, AL, PB, RN)"
+                      },
+                      {
+                        "id": "fjitS2v5A28a",
+                        "ref": "33ba817e-caf6-4111-91ee-ed02551c8be0",
+                        "label": "Sudeste (SP, MG, ES, RJ)"
+                      },
+                      {
+                        "id": "kFYp1JgL7c0b",
+                        "ref": "21cc5d26-3c7c-4a62-9d07-594adf82f226",
+                        "label": "Sul (RS, PR, SC)"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "bo1yPUYUDv6H",
+                    "ref": "8af1e2e4-7da7-41e1-ab2d-07542500de87",
+                    "type": "multiple_choice",
+                    "title": "Você tem filho(s)?",
+                    "properties": {},
+                    "choices": [
+                      {
+                        "id": "7Bp9zJDep4YM",
+                        "ref": "bc9bb38a-15a3-4e28-90ba-42786dc851d4",
+                        "label": "Sim"
+                      },
+                      {
+                        "id": "fl6M1cC3IoDs",
+                        "ref": "d7a56f04-0fee-4b8b-9455-48c32fc9e7cc",
+                        "label": "Não"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "XMkgzRxGxaqs",
+                    "ref": "2c63b5f4-3edf-436d-9227-0ba9639bfe8e",
+                    "type": "multiple_choice",
+                    "title": "Qual o seu momento profissional?",
+                    "properties": {},
+                    "allow_multiple_selections": true,
+                    "choices": [
+                      {
+                        "id": "mAQ5tzLjkGsK",
+                        "ref": "c831d701-8316-4024-89db-b943da694eea",
+                        "label": "CLT"
+                      },
+                      {
+                        "id": "7VYwInK3itRH",
+                        "ref": "4093149a-c31f-413d-a9f3-d4e2ed706843",
+                        "label": "Funcionário público"
+                      },
+                      {
+                        "id": "3yZs83sRX87X",
+                        "ref": "56d0bd8b-245a-4621-a063-47fcb33db1b4",
+                        "label": "Empresário"
+                      },
+                      {
+                        "id": "UKozkHTgkClA",
+                        "ref": "c66a17f4-2b2f-4551-9a1d-3d46bd94803d",
+                        "label": "Autonomo"
+                      },
+                      {
+                        "id": "cTVsCkmqo0Ib",
+                        "ref": "1e2b1e6d-fa1c-43f8-8f95-ed5cd4836bbe",
+                        "label": "Estudante"
+                      },
+                      {
+                        "id": "mnU91fDESnYI",
+                        "ref": "ca8c2419-01fd-4d82-869d-e21fd00664bd",
+                        "label": "Desempregado"
+                      },
+                      {
+                        "id": "JETXkBRuC1JA",
+                        "ref": "02d6c884-1960-4efd-9009-4ea5bc0e0f38",
+                        "label": "Aposentado"
+                      },
+                      {
+                        "id": "dyAxJctyD9yv",
+                        "ref": "8656abd8-b4b3-40d7-be85-67e663a93146",
+                        "label": "Outros"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "LlL2fAiHUmpk",
+                    "ref": "6199f40e-82de-44d8-901a-e5e97ba05159",
+                    "type": "multiple_choice",
+                    "title": "Qual a sua renda mensal?",
+                    "properties": {},
+                    "choices": [
+                      {
+                        "id": "npMFR7FsRx3O",
+                        "ref": "c7b20fd8-ba6a-40ba-9306-7b475c795d60",
+                        "label": "Até R5.000"
+                      },
+                      {
+                        "id": "w40SL03LJI3q",
+                        "ref": "97dd564f-a405-44cf-a144-84ca4508043b",
+                        "label": "Entre R$ 5.001 e R$10.000"
+                      },
+                      {
+                        "id": "EFHXPdnC58Xf",
+                        "ref": "70c44ed0-ff5e-4021-b0a2-25a248fdf396",
+                        "label": "Entre R$ 10.001 e R$20.000"
+                      },
+                      {
+                        "id": "qpNVqFcacjlX",
+                        "ref": "1ca43aff-64cf-4741-bd32-4f45e0edce49",
+                        "label": "Entre R$ 20.001 e R$30.000"
+                      },
+                      {
+                        "id": "0tZ03Tfr2ZdX",
+                        "ref": "dd963728-e215-4678-9f2b-2402090a9daf",
+                        "label": "Entre R$ 30.001 e R$50.000"
+                      },
+                      {
+                        "id": "LVhwpdJRiO7j",
+                        "ref": "912e0542-06d1-48f5-82d7-7619854c610d",
+                        "label": "Acima de R$50.000"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "EqIB7vaKsIWm",
+                    "ref": "25b21709-dd00-45cd-9f46-057b6f1f0f8c",
+                    "type": "multiple_choice",
+                    "title": "Você já vende no Mercado Livre?",
+                    "properties": {},
+                    "choices": [
+                      {
+                        "id": "pslPYf8kiLSW",
+                        "ref": "772075f6-bf8f-418c-8f3a-a59a0139b68d",
+                        "label": "Sim"
+                      },
+                      {
+                        "id": "UqGJB2c2zLKY",
+                        "ref": "591871d5-e6af-4630-bc42-ac67e2f56376",
+                        "label": "Já vendi, porém parei"
+                      },
+                      {
+                        "id": "cnw3V5qxci4l",
+                        "ref": "7984dfa0-6b59-4f2f-8713-fe868540ec02",
+                        "label": "Não"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "LixIzqsRV8Ou",
+                    "ref": "c949da17-739f-4995-ad8b-3a570b3583d9",
+                    "type": "multiple_choice",
+                    "title": "Começou no Mercado Livre há quanto tempo?",
+                    "properties": {},
+                    "choices": [
+                      {
+                        "id": "xDhtKIR4ittB",
+                        "ref": "ebb32097-fe22-44ae-928b-e6f44b4b9da8",
+                        "label": "Menos de 3 meses"
+                      },
+                      {
+                        "id": "gXWUswOtDEEj",
+                        "ref": "cb92694f-6eb4-4906-abb5-dd5a6c1019fc",
+                        "label": "Menos de 1 ano"
+                      },
+                      {
+                        "id": "gj6eoRbXFwTX",
+                        "ref": "17a8b7d7-42e8-45d0-ad41-8d45e2555096",
+                        "label": "Entre 1 e 2 anos"
+                      },
+                      {
+                        "id": "XYWEg5LcSuNm",
+                        "ref": "fa715d90-cfed-4f54-9cb4-b3ce938ee47e",
+                        "label": "Entre 2 e 5 anos"
+                      },
+                      {
+                        "id": "FkvWVdGBjqke",
+                        "ref": "1a65b79d-f08c-4d1b-9479-f08f0ba679b7",
+                        "label": "Mais de 5 anos"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "vKTLiCVGO778",
+                    "ref": "ddf72753-9945-421e-b9a7-07a3fd5427a6",
+                    "type": "multiple_choice",
+                    "title": "Qual o seu nível atual no Mercado Livre?",
+                    "properties": {},
+                    "choices": [
+                      {
+                        "id": "VUBhAdKvLF1Q",
+                        "ref": "c41fda94-4798-4cac-93a1-78dfcb7cc00b",
+                        "label": "Iniciante (Sem medalha)"
+                      },
+                      {
+                        "id": "AfRS8qF3N5nI",
+                        "ref": "64e9ebd1-7b16-4040-ad9b-2d6443c7751f",
+                        "label": "Intermediário (Próximo a conseguir medalha)"
+                      },
+                      {
+                        "id": "qI9ilfiwE1XD",
+                        "ref": "961b0566-e136-472d-81b8-894b689cbabc",
+                        "label": "Avançado (Mercado Líder à Mercado Líder Gold)"
+                      },
+                      {
+                        "id": "bmGhwtUTpEJ1",
+                        "ref": "5aa0ba49-65b3-4142-8325-78173bb35902",
+                        "label": "Platinum (Mercado Líder Platinum)"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "fpoLZzao941i",
+                    "ref": "3c797956-28da-46d0-8692-c317596cdb3f",
+                    "type": "multiple_choice",
+                    "title": "Qual sua maior dificuldade no Mercado Livre?",
+                    "properties": {},
+                    "allow_multiple_selections": true,
+                    "choices": [
+                      {
+                        "id": "RxRGxUOUAvdR",
+                        "ref": "bff8648a-631d-4286-b39c-0e8a9261428f",
+                        "label": "Escalar o faturamento e as vendas"
+                      },
+                      {
+                        "id": "etriFag2gdfX",
+                        "ref": "9c33df09-75e7-4c82-bac8-66d805b16db6",
+                        "label": "Encontrar novos produtos"
+                      },
+                      {
+                        "id": "HyySS98Lq9D8",
+                        "ref": "b8653c1b-c01b-4357-92af-4f1a15227fca",
+                        "label": "Encontrar novos fornecedores"
+                      },
+                      {
+                        "id": "PfYakC8gzsOJ",
+                        "ref": "0de36250-0713-451d-998e-f53098bc9f9a",
+                        "label": "Mercado Livre ADS"
+                      },
+                      {
+                        "id": "YHWRJh2hwkLC",
+                        "ref": "587079ab-e8a5-4b92-b606-e630ccbccbda",
+                        "label": "Fazer trabalhos de  contabilidade"
+                      },
+                      {
+                        "id": "pnAG6gOpbFby",
+                        "ref": "6f952378-faaf-4397-834d-cd1804f15d2b",
+                        "label": "Gerir o meu caixa"
+                      },
+                      {
+                        "id": "90W9bMvOSM7C",
+                        "ref": "1474e290-9093-460a-9570-7fe4b46cf7c4",
+                        "label": "Estruturar uma empresa para crescer"
+                      },
+                      {
+                        "id": "zwVnkDpnaJOs",
+                        "ref": "8a494609-1eeb-45c0-b104-e4212f25f54d",
+                        "label": "Criar uma marca forte"
+                      },
+                      {
+                        "id": "ePx0ftA4G7oh",
+                        "ref": "4274ef03-803e-4f1c-803e-d624cc75ea2f",
+                        "label": "Vender todos os dias"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "KZlmsHVWLG3W",
+                    "ref": "8330711e-ed8e-4218-874d-9f170ed2f11c",
+                    "type": "long_text",
+                    "title": "O que te motivou a querer começar a vender no Mercado Livre?",
+                    "properties": {}
+                  },
+                  {
+                    "id": "9dWmsQ1Ph1QC",
+                    "ref": "c0e48927-96b4-42fd-af5e-11e922e1688b",
+                    "type": "multiple_choice",
+                    "title": "O que te impede de começar?",
+                    "properties": {},
+                    "allow_multiple_selections": true,
+                    "choices": [
+                      {
+                        "id": "PRYVlMwKtA7s",
+                        "ref": "d460026d-a39f-4bec-8f92-492e9039853f",
+                        "label": "Medo de fracassar"
+                      },
+                      {
+                        "id": "h3pK5YWuK2F3",
+                        "ref": "28fad30d-6b5a-42f7-86e8-56fe3627a2fa",
+                        "label": "Medo de largar o emprego atual"
+                      },
+                      {
+                        "id": "PqdruFHJSOxK",
+                        "ref": "0409c608-2128-4946-9afd-3b30df5cb0b8",
+                        "label": "Falta de dinheiro"
+                      },
+                      {
+                        "id": "V9C5DoMn7tZm",
+                        "ref": "df0fd45b-5ae5-4a61-b4e9-d165b46f1a5a",
+                        "label": "Falta de conhecimento"
+                      },
+                      {
+                        "id": "PQkUQFrbwXc7",
+                        "ref": "9b93e282-460f-4a3b-b871-eeda40c60b4c",
+                        "label": "Falta de tempo"
+                      },
+                      {
+                        "id": "xIOGGPIc7VdT",
+                        "ref": "eb081f5c-0b4b-433c-b6bf-accf2586ec8c",
+                        "label": "Não saber o que vender"
+                      },
+                      {
+                        "id": "zi6aeMx7wL4H",
+                        "ref": "78b6c4af-7285-4239-939c-5138ef9455b2",
+                        "label": "Não saber onde encontrar produtos"
+                      },
+                      {
+                        "id": "sUJtmXSzLtbj",
+                        "ref": "7c0926fd-6d74-4ffe-b48d-375722408bf2",
+                        "label": "Não saber por onde começar"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "YjhGZ9RCsg94",
+                    "ref": "228008a1-41ac-42e4-af6d-f62634f11074",
+                    "type": "short_text",
+                    "title": "Você acha que começar a vender no Mercado Livre pode te ajudar de que forma?",
+                    "properties": {}
+                  },
+                  {
+                    "id": "rBtOgyd2UeaR",
+                    "ref": "ce4bb126-c3ce-4499-8f11-78bb05c7616d",
+                    "type": "multiple_choice",
+                    "title": "Quais são suas maiores dúvidas sobre vender online?",
+                    "properties": {},
+                    "allow_multiple_selections": true,
+                    "choices": [
+                      {
+                        "id": "42ssn5X0Yszi",
+                        "ref": "3e61efe5-875b-4c66-8354-108b4144d0ca",
+                        "label": "É preciso de muito dinheiro para começar?"
+                      },
+                      {
+                        "id": "TBMIwQZeNf1z",
+                        "ref": "d90f2f78-6faa-42c8-a78e-fc2906660efb",
+                        "label": "É possível trabalhar com e-commerce mesmo sendo CLT?"
+                      },
+                      {
+                        "id": "TPlmlwe2LDuR",
+                        "ref": "6973eca5-d9aa-4567-b6d3-cc08638c1eee",
+                        "label": "É possível viver de e-commerce morando longe de centros comerciais?"
+                      },
+                      {
+                        "id": "ICsQh5f8aWEv",
+                        "ref": "23d7e362-c10b-41cc-a44c-8eb74f1acf54",
+                        "label": "Qual produto ou fornecedor preciso achar para começar vender?"
+                      },
+                      {
+                        "id": "qKz8qWNOhK8o",
+                        "ref": "7450b7ff-c2f7-41e1-9e0b-258bb5dd270b",
+                        "label": "É necessário ser pessoa jurídica para vender?"
+                      },
+                      {
+                        "id": "J34XAmEGCcs0",
+                        "ref": "51b6d8b2-6f0b-4d6e-a08b-5060e418a7d9",
+                        "label": "Outras"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "RWfSRIUVjv0h",
+                    "ref": "61916979-5d1a-40a7-bfae-bd30f0ed3f8c",
+                    "type": "short_text",
+                    "title": "Por qual motivo você parou de vender?",
+                    "properties": {}
+                  },
+                  {
+                    "id": "qIptdyjdgkDL",
+                    "ref": "2802e880-1e27-4b87-b2a2-d8a11cfaae44",
+                    "type": "multiple_choice",
+                    "title": "Qual sua maior dificuldade enquanto vendia no Mercado Livre?",
+                    "properties": {},
+                    "allow_multiple_selections": true,
+                    "choices": [
+                      {
+                        "id": "6PKvEYT0t9r9",
+                        "ref": "41e904e5-1f76-4917-9d77-afa87c73485a",
+                        "label": "Escalar o faturamento e as vendas"
+                      },
+                      {
+                        "id": "HUS8UofB5n4q",
+                        "ref": "9a1446a2-3cf0-4076-aabd-6eebbc8a13a0",
+                        "label": "Encontrar novos produtos"
+                      },
+                      {
+                        "id": "TWfMBnCjnjBF",
+                        "ref": "3e5e4c60-5832-45e2-9a53-9a5cf7e80195",
+                        "label": "Encontrar novos fornecedores"
+                      },
+                      {
+                        "id": "uQLGzpZDzHWU",
+                        "ref": "2b451bbe-5942-45f6-9978-39351e743d0e",
+                        "label": "Mercado Livre ADS"
+                      },
+                      {
+                        "id": "8aWzTmhiMgHY",
+                        "ref": "c579b1a9-9f1f-41ca-bbc2-2e25ed9a5227",
+                        "label": "Fazer trabalhos de  contabilidade"
+                      },
+                      {
+                        "id": "NDZ6UrPrnDH9",
+                        "ref": "2b2e95d5-2303-4766-ac09-8b8d2875017a",
+                        "label": "Gerir o meu caixa"
+                      },
+                      {
+                        "id": "EzGG1q3YswTs",
+                        "ref": "59aa38ba-b7b6-45ba-94f0-d5b92d47ca1e",
+                        "label": "Estruturar uma empresa para crescer"
+                      },
+                      {
+                        "id": "rhcpmMbhzkBK",
+                        "ref": "7960a4e3-88cb-4b4a-a17d-c0297757d237",
+                        "label": "Criar uma marca forte"
+                      },
+                      {
+                        "id": "qXhLUeKUYHd0",
+                        "ref": "b6f7115d-307f-458e-9ba4-5449268e6994",
+                        "label": "Vender todos os dias"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "HhPkoG99GTKB",
+                    "ref": "739b35c1-ec20-419b-a866-763217399a39",
+                    "type": "multiple_choice",
+                    "title": "Qual o seu maior sonho quando o assunto é dinheiro?",
+                    "properties": {},
+                    "choices": [
+                      {
+                        "id": "mKOe5Pk0fTVZ",
+                        "ref": "553139a0-e06a-4732-9982-1d7a9dacc8b6",
+                        "label": "Comprar o que eu quiser sem ter que olhar o saldo no banco"
+                      },
+                      {
+                        "id": "UkFqnW2uCatf",
+                        "ref": "0c3dbb36-1643-4715-bf79-1600f890e563",
+                        "label": "Proporcionar uma melhor qualidade de vida para a minha família"
+                      },
+                      {
+                        "id": "kyvPqh3yY9x6",
+                        "ref": "af2abd56-cb90-4b3f-b4e6-5b9966f05443",
+                        "label": "Ter uma empresa e ser um empresário de sucesso"
+                      },
+                      {
+                        "id": "XBAN91H771F8",
+                        "ref": "fb46be81-80fc-42fe-a67c-5e11e823f341",
+                        "label": "Ter uma casa e um carro próprios"
+                      }
+                    ]
+                  }
+                ],
+                "endings": [
+                  {
+                    "id": "j4R9oHxd3FMa",
+                    "ref": "01FJSAWQ3RW9KTTG9ZQBK83CNN",
+                    "title": "Muito obrigado pelas respostas!",
+                    "type": "thankyou_screen",
+                    "properties": {
+                      "description": "Vamos analisar cada vírgula para poder entregar o melhor conteúdo nos próximos dias.",
+                      "button_text": "Finalizar",
+                      "show_button": true,
+                      "share_icons": false,
+                      "button_mode": "default_redirect"
+                    }
+                  }
+                ]
+              },
+              "answers": [
+                {
+                  "type": "email",
+                  "email": "vitorrqueiroztrafego@gmail.com",
+                  "field": {
+                    "id": "h2baL8rRgVYP",
+                    "type": "email",
+                    "ref": "6bad3e33-dbd3-4640-a174-d53c574dce41"
+                  }
+                },
+                {
+                  "type": "choice",
+                  "choice": {
+                    "id": "Hvub6Cv8zVKO",
+                    "label": "Entre 18 e 25 anos",
+                    "ref": "9a34205e-dfb3-46d3-879a-731b479f84b4"
+                  },
+                  "field": {
+                    "id": "DYo53Z75oop4",
+                    "type": "multiple_choice",
+                    "ref": "01FJSAWQ3RNRMTG38RWVMBG5NJ"
+                  }
+                },
+                {
+                  "type": "choice",
+                  "choice": {
+                    "id": "VQI41kvjTYWc",
+                    "label": "Masculino",
+                    "ref": "3e9b6858-cf39-40dd-9b20-0c94bf0a6e19"
+                  },
+                  "field": {
+                    "id": "hhysXBlXNtmL",
+                    "type": "multiple_choice",
+                    "ref": "dcbc2d7f-a75a-4986-b6f5-db02d6b96d6a"
+                  }
+                },
+                {
+                  "type": "choice",
+                  "choice": {
+                    "id": "fjitS2v5A28a",
+                    "label": "Sudeste (SP, MG, ES, RJ)",
+                    "ref": "33ba817e-caf6-4111-91ee-ed02551c8be0"
+                  },
+                  "field": {
+                    "id": "le2AfVIbm9Fg",
+                    "type": "multiple_choice",
+                    "ref": "b5c078b2-1d9f-444c-9f20-b9f88a05aef0"
+                  }
+                },
+                {
+                  "type": "choice",
+                  "choice": {
+                    "id": "fl6M1cC3IoDs",
+                    "label": "Não",
+                    "ref": "d7a56f04-0fee-4b8b-9455-48c32fc9e7cc"
+                  },
+                  "field": {
+                    "id": "bo1yPUYUDv6H",
+                    "type": "multiple_choice",
+                    "ref": "8af1e2e4-7da7-41e1-ab2d-07542500de87"
+                  }
+                },
+                {
+                  "type": "choices",
+                  "choices": {
+                    "ids": [
+                      "3yZs83sRX87X",
+                      "UKozkHTgkClA"
+                    ],
+                    "labels": [
+                      "Empresário",
+                      "Autonomo"
+                    ],
+                    "refs": [
+                      "56d0bd8b-245a-4621-a063-47fcb33db1b4",
+                      "c66a17f4-2b2f-4551-9a1d-3d46bd94803d"
+                    ]
+                  },
+                  "field": {
+                    "id": "XMkgzRxGxaqs",
+                    "type": "multiple_choice",
+                    "ref": "2c63b5f4-3edf-436d-9227-0ba9639bfe8e"
+                  }
+                },
+                {
+                  "type": "choice",
+                  "choice": {
+                    "id": "npMFR7FsRx3O",
+                    "label": "Até R5.000",
+                    "ref": "c7b20fd8-ba6a-40ba-9306-7b475c795d60"
+                  },
+                  "field": {
+                    "id": "LlL2fAiHUmpk",
+                    "type": "multiple_choice",
+                    "ref": "6199f40e-82de-44d8-901a-e5e97ba05159"
+                  }
+                },
+                {
+                  "type": "choice",
+                  "choice": {
+                    "id": "UqGJB2c2zLKY",
+                    "label": "Já vendi, porém parei",
+                    "ref": "591871d5-e6af-4630-bc42-ac67e2f56376"
+                  },
+                  "field": {
+                    "id": "EqIB7vaKsIWm",
+                    "type": "multiple_choice",
+                    "ref": "25b21709-dd00-45cd-9f46-057b6f1f0f8c"
+                  }
+                },
+                {
+                  "type": "choice",
+                  "choice": {
+                    "id": "gXWUswOtDEEj",
+                    "label": "Menos de 1 ano",
+                    "ref": "cb92694f-6eb4-4906-abb5-dd5a6c1019fc"
+                  },
+                  "field": {
+                    "id": "LixIzqsRV8Ou",
+                    "type": "multiple_choice",
+                    "ref": "c949da17-739f-4995-ad8b-3a570b3583d9"
+                  }
+                },
+                {
+                  "type": "choice",
+                  "choice": {
+                    "id": "VUBhAdKvLF1Q",
+                    "label": "Iniciante (Sem medalha)",
+                    "ref": "c41fda94-4798-4cac-93a1-78dfcb7cc00b"
+                  },
+                  "field": {
+                    "id": "vKTLiCVGO778",
+                    "type": "multiple_choice",
+                    "ref": "ddf72753-9945-421e-b9a7-07a3fd5427a6"
+                  }
+                },
+                {
+                  "type": "choices",
+                  "choices": {
+                    "ids": [
+                      "RxRGxUOUAvdR",
+                      "PfYakC8gzsOJ",
+                      "pnAG6gOpbFby"
+                    ],
+                    "labels": [
+                      "Escalar o faturamento e as vendas",
+                      "Mercado Livre ADS",
+                      "Gerir o meu caixa"
+                    ],
+                    "refs": [
+                      "bff8648a-631d-4286-b39c-0e8a9261428f",
+                      "0de36250-0713-451d-998e-f53098bc9f9a",
+                      "6f952378-faaf-4397-834d-cd1804f15d2b"
+                    ]
+                  },
+                  "field": {
+                    "id": "fpoLZzao941i",
+                    "type": "multiple_choice",
+                    "ref": "3c797956-28da-46d0-8692-c317596cdb3f"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": "Meu motivo é liberdade - teste",
+                  "field": {
+                    "id": "KZlmsHVWLG3W",
+                    "type": "long_text",
+                    "ref": "8330711e-ed8e-4218-874d-9f170ed2f11c"
+                  }
+                },
+                {
+                  "type": "choices",
+                  "choices": {
+                    "ids": [
+                      "h3pK5YWuK2F3",
+                      "PqdruFHJSOxK",
+                      "V9C5DoMn7tZm"
+                    ],
+                    "labels": [
+                      "Medo de largar o emprego atual",
+                      "Falta de dinheiro",
+                      "Falta de conhecimento"
+                    ],
+                    "refs": [
+                      "28fad30d-6b5a-42f7-86e8-56fe3627a2fa",
+                      "0409c608-2128-4946-9afd-3b30df5cb0b8",
+                      "df0fd45b-5ae5-4a61-b4e9-d165b46f1a5a"
+                    ]
+                  },
+                  "field": {
+                    "id": "9dWmsQ1Ph1QC",
+                    "type": "multiple_choice",
+                    "ref": "c0e48927-96b4-42fd-af5e-11e922e1688b"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": "Sim, iniciar as vendas pode me ajudar muito",
+                  "field": {
+                    "id": "YjhGZ9RCsg94",
+                    "type": "short_text",
+                    "ref": "228008a1-41ac-42e4-af6d-f62634f11074"
+                  }
+                },
+                {
+                  "type": "choices",
+                  "choices": {
+                    "ids": [
+                      "42ssn5X0Yszi",
+                      "TBMIwQZeNf1z",
+                      "TPlmlwe2LDuR"
+                    ],
+                    "labels": [
+                      "É preciso de muito dinheiro para começar?",
+                      "É possível trabalhar com e-commerce mesmo sendo CLT?",
+                      "É possível viver de e-commerce morando longe de centros comerciais?"
+                    ],
+                    "refs": [
+                      "3e61efe5-875b-4c66-8354-108b4144d0ca",
+                      "d90f2f78-6faa-42c8-a78e-fc2906660efb",
+                      "6973eca5-d9aa-4567-b6d3-cc08638c1eee"
+                    ]
+                  },
+                  "field": {
+                    "id": "rBtOgyd2UeaR",
+                    "type": "multiple_choice",
+                    "ref": "ce4bb126-c3ce-4499-8f11-78bb05c7616d"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": "Parei de vender por um motivo",
+                  "field": {
+                    "id": "RWfSRIUVjv0h",
+                    "type": "short_text",
+                    "ref": "61916979-5d1a-40a7-bfae-bd30f0ed3f8c"
+                  }
+                },
+                {
+                  "type": "choices",
+                  "choices": {
+                    "ids": [
+                      "6PKvEYT0t9r9",
+                      "HUS8UofB5n4q",
+                      "TWfMBnCjnjBF"
+                    ],
+                    "labels": [
+                      "Escalar o faturamento e as vendas",
+                      "Encontrar novos produtos",
+                      "Encontrar novos fornecedores"
+                    ],
+                    "refs": [
+                      "41e904e5-1f76-4917-9d77-afa87c73485a",
+                      "9a1446a2-3cf0-4076-aabd-6eebbc8a13a0",
+                      "3e5e4c60-5832-45e2-9a53-9a5cf7e80195"
+                    ]
+                  },
+                  "field": {
+                    "id": "qIptdyjdgkDL",
+                    "type": "multiple_choice",
+                    "ref": "2802e880-1e27-4b87-b2a2-d8a11cfaae44"
+                  }
+                },
+                {
+                  "type": "choice",
+                  "choice": {
+                    "id": "mKOe5Pk0fTVZ",
+                    "label": "Comprar o que eu quiser sem ter que olhar o saldo no banco",
+                    "ref": "553139a0-e06a-4732-9982-1d7a9dacc8b6"
+                  },
+                  "field": {
+                    "id": "HhPkoG99GTKB",
+                    "type": "multiple_choice",
+                    "ref": "739b35c1-ec20-419b-a866-763217399a39"
+                  }
+                }
+              ],
+              "ending": {
+                "id": "j4R9oHxd3FMa",
+                "ref": "01FJSAWQ3RW9KTTG9ZQBK83CNN"
+              }
+            }
+          },
+          "webhookUrl": "https://n8nwebhookdiegorosa.automagicbots.com.br/webhook/formulario-de-pesquisa",
+          "executionMode": "production"
+        }
+      }
+    ],
+    "formulario_sessao_estrategica": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8nwebhookdiegorosa.automagicbots.com.br",
+            "user-agent": "Typeform Webhooks",
+            "content-length": "7651",
+            "accept-encoding": "gzip",
+            "content-type": "application/json",
+            "traceparent": "00-813ba1ab4debee2349f9893a858add11-3b80695b52aa366f-01",
+            "x-forwarded-for": "34.230.177.131",
+            "x-forwarded-host": "n8nwebhookdiegorosa.automagicbots.com.br",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "73bda55f1b58",
+            "x-real-ip": "34.230.177.131"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "event_id": "01J1YYGX46D49EWXV1R34ATS31",
+            "event_type": "form_response",
+            "form_response": {
+              "form_id": "ppHJeTp2",
+              "token": "7ojg0asdqgztqr0zkhgm7ojg0asbd3df",
+              "landed_at": "2024-07-04T13:20:08Z",
+              "submitted_at": "2024-07-04T13:21:44Z",
+              "hidden": {
+                "utm_campaign": "campaign2",
+                "utm_content": "content3",
+                "utm_medium": "medium4",
+                "utm_source": "source1",
+                "utm_term": "term5"
+              },
+              "definition": {
+                "id": "ppHJeTp2",
+                "title": "Formulário Sessão Estratégica",
+                "fields": [
+                  {
+                    "id": "va9OHBO18m5A",
+                    "ref": "4bf95c6e-6c0d-4604-a5c2-5e7a2f263733",
+                    "type": "short_text",
+                    "title": "Qual é o seu nome?",
+                    "properties": {}
+                  },
+                  {
+                    "id": "73DLjcDNqsQo",
+                    "ref": "bfa6359b-6cb0-49b2-96fa-24002313b75d",
+                    "type": "email",
+                    "title": "Qual é o seu email?",
+                    "properties": {}
+                  },
+                  {
+                    "id": "ixBo6bund58e",
+                    "ref": "9b3568c9-c0b8-47a1-aa72-28727424f203",
+                    "type": "phone_number",
+                    "title": "Qual é o seu telefone?",
+                    "properties": {}
+                  },
+                  {
+                    "id": "i8g8yoHRKlsi",
+                    "ref": "daaef6cd-006d-4ff2-a197-adb74c48ece6",
+                    "type": "short_text",
+                    "title": "Qual é o seu Instagram?",
+                    "properties": {}
+                  },
+                  {
+                    "id": "rbTgKc2trcSr",
+                    "ref": "603785be-6397-4fbe-91aa-eddd5eb95dad",
+                    "type": "multiple_choice",
+                    "title": "Você tem loja física ou é fabricante?",
+                    "properties": {},
+                    "choices": [
+                      {
+                        "id": "t0yqq2ebbKV7",
+                        "ref": "c874b578-ada3-4952-8792-ab6072f03725",
+                        "label": "Tenho loja física e não sou fabricante"
+                      },
+                      {
+                        "id": "931CgZOVTces",
+                        "ref": "c67026b5-9cf5-413b-b665-c305a3903532",
+                        "label": "Sou fabricante e não tenho loja física"
+                      },
+                      {
+                        "id": "dcH5sHRveuwL",
+                        "ref": "29613f9c-bfc6-4369-b8c6-39ab373d8e5a",
+                        "label": "Tenho loja física e sou fabricante"
+                      },
+                      {
+                        "id": "7MFfNAG4a9So",
+                        "ref": "fd9020e1-8188-4d3d-93a8-f31a6be35d81",
+                        "label": "Não vendo no físico e nem fabrico"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "EsnDOX16wRn7",
+                    "ref": "145459b5-8896-4f37-9666-8c6004b58c51",
+                    "type": "multiple_choice",
+                    "title": "Qual capital disponível você tem para investir em produtos?",
+                    "properties": {},
+                    "choices": [
+                      {
+                        "id": "GA70lkaGvihF",
+                        "ref": "a9f47fed-8a80-495c-83fe-3808a5268839",
+                        "label": "Não tenho dinheiro"
+                      },
+                      {
+                        "id": "amIo1e7wu71R",
+                        "ref": "a7632fe8-0331-4baf-ab95-28b3a1bd246d",
+                        "label": "Entre R$ 0 e R$500"
+                      },
+                      {
+                        "id": "viMyRrJXqRtw",
+                        "ref": "cf94b03f-1d93-4ec1-ad7c-8f61a69eab6e",
+                        "label": "Entre R$ 501 e R$2.000"
+                      },
+                      {
+                        "id": "CamXgaFn2f0b",
+                        "ref": "960363fc-78a2-4ae7-a011-e816eb1566d0",
+                        "label": "Entre R$2.001 e R$5.000"
+                      },
+                      {
+                        "id": "Uuu1P7GSFTY8",
+                        "ref": "154aac07-85d9-4c79-b026-1fa363ccbd68",
+                        "label": "Entre R$5.001 e R$10.000"
+                      },
+                      {
+                        "id": "KPKAbKbEWaP8",
+                        "ref": "c7ab4704-2a3b-4dac-9b83-119193f07051",
+                        "label": "Entre R$10.001 e R$20.000"
+                      },
+                      {
+                        "id": "ArtMRHS8ccS1",
+                        "ref": "e92afffd-3b99-47b2-af16-e80650ffffce",
+                        "label": "Acima de R$20.000"
+                      },
+                      {
+                        "id": "FTEalvBiN5K9",
+                        "ref": "34b8e99c-1b3c-41c1-9bc8-82024fd45e9e",
+                        "label": "Não tenho capital, mas tenho produtos próprios."
+                      }
+                    ]
+                  },
+                  {
+                    "id": "sehKaBC1ze8W",
+                    "ref": "deebc15d-ff02-485f-9da9-b8485d7019a7",
+                    "type": "multiple_choice",
+                    "title": "Qual é o seu faturamento líquido mensal neste ano?",
+                    "properties": {},
+                    "choices": [
+                      {
+                        "id": "RVSzsPsmvc3z",
+                        "ref": "a98dc5b4-9211-42c4-8b47-177ea2f6bf14",
+                        "label": "Até R$5.000"
+                      },
+                      {
+                        "id": "CNnAEfGZPQ2g",
+                        "ref": "2ac4f69d-46cd-4450-87cd-c5fe251e8781",
+                        "label": "Entre R$5.001 e R$10.000"
+                      },
+                      {
+                        "id": "91PFx78rZjIk",
+                        "ref": "54d4af95-3adf-4fad-97a0-a73fd912cdee",
+                        "label": "Entre R$10.001 e R$20.000"
+                      },
+                      {
+                        "id": "MLuMZIdB8c2f",
+                        "ref": "a2ad15a5-5ce7-4cbd-898b-0ca8a5eb7483",
+                        "label": "Entre R$20.001 e R$30.000"
+                      },
+                      {
+                        "id": "01dpa7ofvawl",
+                        "ref": "a91016d1-ffbd-48da-890f-1e385088233c",
+                        "label": "Entre R$30.001 e R$50.000"
+                      },
+                      {
+                        "id": "x94ybUtcHmYQ",
+                        "ref": "0b4bb3f3-aa13-47ee-9e7f-3d721f028445",
+                        "label": "Acima de R$50.000"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "u9CXFbCstmvz",
+                    "ref": "834176d2-bc57-4d6e-8e3a-0063f540d133",
+                    "type": "multiple_choice",
+                    "title": "Você já tem uma conta no Mercado Livre?",
+                    "properties": {},
+                    "choices": [
+                      {
+                        "id": "ZmXF4KsjCIbs",
+                        "ref": "6e35405e-94ba-43fe-ae04-a110b698fba4",
+                        "label": "Sim"
+                      },
+                      {
+                        "id": "TuhBATCV9ZFt",
+                        "ref": "ce07f2ee-848e-4e7e-8182-e15d21cc0e9d",
+                        "label": "Não"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "6qnHEcg7rkJU",
+                    "ref": "1ba59414-6151-477f-be3c-464a65509e02",
+                    "type": "multiple_choice",
+                    "title": "Qual a sua média de faturamento no Mercado Livre dos últimos 30 dias?",
+                    "properties": {},
+                    "choices": [
+                      {
+                        "id": "clAsTo8fQn4s",
+                        "ref": "d77b4d67-fa03-435a-ae7b-464632540bbd",
+                        "label": "Até R$10.000"
+                      },
+                      {
+                        "id": "5SZnG8akAJ0c",
+                        "ref": "742fd8c3-c929-40fa-ba7f-65c322f81778",
+                        "label": "Entre R$10.001 e R$50.000"
+                      },
+                      {
+                        "id": "zym4By1L6Sy3",
+                        "ref": "364f34de-d463-4c67-bf42-49a7f5ce7f10",
+                        "label": "Entre R$50.001 e R$100.000"
+                      },
+                      {
+                        "id": "bcdzxsCgGmwO",
+                        "ref": "775d595f-f913-4a0f-8008-a94fd8cecdcf",
+                        "label": "Entre R$100.001 e R$200.000"
+                      },
+                      {
+                        "id": "fcsm1ZjNSpCH",
+                        "ref": "d67cef7b-fca9-40bc-8593-5231f7ab5554",
+                        "label": "Entre R$ 200.001 e R$500.000"
+                      },
+                      {
+                        "id": "RL2sQzHmBgOS",
+                        "ref": "253c7558-8b8c-4153-8ef7-5c399053a16d",
+                        "label": "Acima de R$500.000"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "l7d0ypZEoA0T",
+                    "ref": "986e7448-5992-4f5e-b970-fd6c3c495e23",
+                    "type": "long_text",
+                    "title": "Certo. Qual o nicho de atuação da empresa ou que deseja trabalhar? Multi-nichos ou algo específico?",
+                    "properties": {}
+                  },
+                  {
+                    "id": "wKN91yrhZta7",
+                    "ref": "ffd4478e-ed99-4c23-9f5f-0263ad077a0f",
+                    "type": "short_text",
+                    "title": "Em qual Cidade e Estado sua operação está?",
+                    "properties": {}
+                  },
+                  {
+                    "id": "uqd69txiXrvi",
+                    "ref": "120c25b3-5d25-4a36-bfbe-8bc4a7688792",
+                    "type": "long_text",
+                    "title": "Qual é a sua maior dificuldade em escalar suas vendas hoje?",
+                    "properties": {}
+                  }
+                ],
+                "endings": [
+                  {
+                    "id": "DefaultTyScreen",
+                    "ref": "default_tys",
+                    "title": "Thanks for completing this typeform\nNow *create your own* — it's free, easy, & beautiful",
+                    "type": "thankyou_screen",
+                    "properties": {
+                      "button_text": "Create a *typeform*",
+                      "show_button": true,
+                      "share_icons": false,
+                      "button_mode": "default_redirect"
+                    },
+                    "attachment": {
+                      "type": "image",
+                      "href": "https://images.typeform.com/images/2dpnUBBkz2VN"
+                    }
+                  }
+                ]
+              },
+              "answers": [
+                {
+                  "type": "text",
+                  "text": "Vitor Queiroz Teste",
+                  "field": {
+                    "id": "va9OHBO18m5A",
+                    "type": "short_text",
+                    "ref": "4bf95c6e-6c0d-4604-a5c2-5e7a2f263733"
+                  }
+                },
+                {
+                  "type": "email",
+                  "email": "vitorrqueiroztrafego@gmail.com",
+                  "field": {
+                    "id": "73DLjcDNqsQo",
+                    "type": "email",
+                    "ref": "bfa6359b-6cb0-49b2-96fa-24002313b75d"
+                  }
+                },
+                {
+                  "type": "phone_number",
+                  "phone_number": "+5519984574874",
+                  "field": {
+                    "id": "ixBo6bund58e",
+                    "type": "phone_number",
+                    "ref": "9b3568c9-c0b8-47a1-aa72-28727424f203"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": "@eu.vitorqueiroz",
+                  "field": {
+                    "id": "i8g8yoHRKlsi",
+                    "type": "short_text",
+                    "ref": "daaef6cd-006d-4ff2-a197-adb74c48ece6"
+                  }
+                },
+                {
+                  "type": "choice",
+                  "choice": {
+                    "id": "t0yqq2ebbKV7",
+                    "label": "Tenho loja física e não sou fabricante",
+                    "ref": "c874b578-ada3-4952-8792-ab6072f03725"
+                  },
+                  "field": {
+                    "id": "rbTgKc2trcSr",
+                    "type": "multiple_choice",
+                    "ref": "603785be-6397-4fbe-91aa-eddd5eb95dad"
+                  }
+                },
+                {
+                  "type": "choice",
+                  "choice": {
+                    "id": "GA70lkaGvihF",
+                    "label": "Não tenho dinheiro",
+                    "ref": "a9f47fed-8a80-495c-83fe-3808a5268839"
+                  },
+                  "field": {
+                    "id": "EsnDOX16wRn7",
+                    "type": "multiple_choice",
+                    "ref": "145459b5-8896-4f37-9666-8c6004b58c51"
+                  }
+                },
+                {
+                  "type": "choice",
+                  "choice": {
+                    "id": "RVSzsPsmvc3z",
+                    "label": "Até R$5.000",
+                    "ref": "a98dc5b4-9211-42c4-8b47-177ea2f6bf14"
+                  },
+                  "field": {
+                    "id": "sehKaBC1ze8W",
+                    "type": "multiple_choice",
+                    "ref": "deebc15d-ff02-485f-9da9-b8485d7019a7"
+                  }
+                },
+                {
+                  "type": "choice",
+                  "choice": {
+                    "id": "ZmXF4KsjCIbs",
+                    "label": "Sim",
+                    "ref": "6e35405e-94ba-43fe-ae04-a110b698fba4"
+                  },
+                  "field": {
+                    "id": "u9CXFbCstmvz",
+                    "type": "multiple_choice",
+                    "ref": "834176d2-bc57-4d6e-8e3a-0063f540d133"
+                  }
+                },
+                {
+                  "type": "choice",
+                  "choice": {
+                    "id": "clAsTo8fQn4s",
+                    "label": "Até R$10.000",
+                    "ref": "d77b4d67-fa03-435a-ae7b-464632540bbd"
+                  },
+                  "field": {
+                    "id": "6qnHEcg7rkJU",
+                    "type": "multiple_choice",
+                    "ref": "1ba59414-6151-477f-be3c-464a65509e02"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": "nicho de atuação",
+                  "field": {
+                    "id": "l7d0ypZEoA0T",
+                    "type": "long_text",
+                    "ref": "986e7448-5992-4f5e-b970-fd6c3c495e23"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": "cidade/estado",
+                  "field": {
+                    "id": "wKN91yrhZta7",
+                    "type": "short_text",
+                    "ref": "ffd4478e-ed99-4c23-9f5f-0263ad077a0f"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": "maior dificuldade",
+                  "field": {
+                    "id": "uqd69txiXrvi",
+                    "type": "long_text",
+                    "ref": "120c25b3-5d25-4a36-bfbe-8bc4a7688792"
+                  }
+                }
+              ],
+              "ending": {
+                "id": "DefaultTyScreen",
+                "ref": "default_tys"
+              }
+            }
+          },
+          "webhookUrl": "https://n8nwebhookdiegorosa.automagicbots.com.br/webhook/formulario-sessao-estrategica",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "W42KfN49FgPKHRvQ"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2024-06-14T14:07:33.662Z",
+      "updatedAt": "2024-06-14T14:07:33.662Z",
+      "id": "1MIunzjT7OfEMLKl",
+      "name": "[NAG]"
+    }
+  ],
+  "triggerCount": 2,
+  "updatedAt": "2024-07-04T16:18:00.591Z",
+  "versionId": "9fb6923b-2152-4d3d-b5f4-a8b2d999c079"
+}
