@@ -1,0 +1,62 @@
+{
+  "active": false,
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2024-05-14T18:39:18.528Z",
+  "id": "W42KfN49FgPKHRvQ",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "⚙️ Aviso de Erro no Discord",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "8c4ce7c0-032e-4759-8658-c0e28935a11e",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        560,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "webhookUri": "https://discord.com/api/webhooks/1051557732941058118/bR9saqZ3PRvvbYzTDR9odD1sIKwiWkTnK_hx84LUjs2_wgbDThYfwaxIO4EoU-o-yzRU",
+        "text": "=🚨 **Workflow com erro no N8N da Action Experts**\n\nO Workflow **{{ $json[\"workflow\"][\"name\"] }}**, do **ID {{ $json[\"workflow\"][\"id\"] }}**, acabou de apresentar um erro.\n\nAssim que puder, dê uma conferida e ajuste o erro apresentado.",
+        "options": {}
+      },
+      "id": "92d34b8c-4f8c-48d7-bd22-eac1da90ba9b",
+      "name": "Discord",
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 1,
+      "position": [
+        780,
+        280
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "W42KfN49FgPKHRvQ"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2024-05-14T18:39:26.771Z",
+  "versionId": "d26c4cfc-0379-4d28-9d4a-cfadfb182b10"
+}
