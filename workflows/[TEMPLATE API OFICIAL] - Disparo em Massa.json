@@ -1,0 +1,188 @@
+{
+  "active": false,
+  "connections": {
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp Business Cloud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking \"Test workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp Business Cloud": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2024-08-12T19:23:05.479Z",
+  "id": "x1VH6DBrszw1h2Yb",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "[TEMPLATE API OFICIAL] - Disparo em Massa",
+  "nodes": [
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1JpRIzDJNA_HXHdu6--gE7CuXPFmViQpJcOe3DdvqmEc",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JpRIzDJNA_HXHdu6--gE7CuXPFmViQpJcOe3DdvqmEc/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "da92c312-d236-41bd-9d8f-11b261349d0f",
+      "name": "Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.2,
+      "position": [
+        -40,
+        640
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "exoLmMi20kOraoEG",
+          "name": "[Google Sheets] - Automagic Bots"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const telefone = $node[\"Loop Over Items\"].json[\"TELEFONE\"].toString();\n\n// Extrair o DDI a partir do telefone limpo\nconst ddi = '55';\n\nconst ddd = telefone.slice(0,2);\nconst telefonefinal = ddi + ddd + telefone.slice(-9);\n\nreturn {telefonefinal};"
+      },
+      "id": "656bf98e-cc2f-41a2-a3e6-fd4cd4522775",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
+        620
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "86e63d1d-c1c7-4bee-b71c-a461797834d3",
+      "name": "When clicking \"Test workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -220,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "11017490-e664-41fd-8fd0-58d993d44c81",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        140,
+        640
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "ed6879ac-d9ba-436f-afa8-abf2ca8ee8db",
+      "name": "Replace Me",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        460,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "300708243128017",
+        "recipientPhoneNumber": "={{ $node[\"Code\"].json[\"telefonefinal\"] }}",
+        "template": "23_07_lista_guru|pt_BR"
+      },
+      "id": "6b9318fe-a34b-425a-9227-0f3bf2634d93",
+      "name": "WhatsApp Business Cloud",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        720,
+        600
+      ],
+      "credentials": {
+        "whatsAppApi": {
+          "id": "uWn3sWudgapENreU",
+          "name": "[API Oficial WhatsApp] - Diego Rosa"
+        }
+      },
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "W42KfN49FgPKHRvQ"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2024-08-12T20:29:34.276Z",
+  "versionId": "4cc318b5-6418-4dd2-ae43-1859043dfb54"
+}
